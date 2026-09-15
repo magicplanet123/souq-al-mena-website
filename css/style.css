@@ -897,3 +897,8 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Hide chatbot modal on homepage, keep floating button */
+body:not(.service-page) .chatbot-container {
+    display: none !important;
+}
