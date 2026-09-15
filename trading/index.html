@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="General Trading & Product Sourcing - Wholesale, import/export, rice, grains, and international product sourcing via Souq Al Mena.">
+    <meta name="keywords" content="general trading UAE, wholesale products, product sourcing, import export, rice sourcing, grains wholesale, suppliers UAE, bulk wholesale, international trading, B2B supplier, procurement solutions, wholesale distribution, commodity trading, grain suppliers UAE, rice wholesale UAE, food wholesale, product aggregation, supplier network, wholesale dealer, import wholesale, export supplier, wholesale distributor, trading company UAE, bulk purchasing, wholesale marketplace, commercial supplier, business-to-business trading, Amazon supplier, Noon supplier, wholesale partner, cost-effective sourcing, reliable supplier UAE, competitive wholesale prices, rice supplier worldwide, global grain supplier, international rice trading, basmati rice wholesale, jasmine rice supplier, rice exporter, grain exporter globally, wholesale rice distributor, bulk rice orders, premium rice wholesale, rice supplier Asia, rice supplier Africa, rice supplier Europe, grain wholesale globally, commodity supplier worldwide, bulk grain export, agricultural products wholesale, food products supplier, spices wholesale, pulses wholesale, flour wholesale, rice mill, grain processing, agricultural wholesale, international commodity trading, cross-border grain trading, export quality grains, certified rice supplier, organic rice wholesale, bulk rice distributor">
+    <title>General Trading - Wholesale & Product Sourcing</title>
+    <link rel="canonical" href="https://www.souq-mena.com/trading/">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><span class="logo-text">General Trading</span></div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Back to Souq Al Mena</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#quote" class="nav-link">Request Quote</a></li>
+                <li><a href="https://wa.me/971502687989" class="nav-link whatsapp-nav">📱 WhatsApp</a></li>
+            </ul>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">General Trading & Product Sourcing</h1>
+            <p class="hero-subtitle">International wholesale, import/export, and comprehensive procurement solutions</p>
+            <div class="hero-cta">
+                <a href="#services" class="btn-primary">Explore Services</a>
+                <a href="https://wa.me/971502687989" class="btn-secondary">Request Products</a>
+            </div>
+        </div>
+    </section>
+
+    <section style="max-width: 1200px; margin: 0 auto; padding: 60px 2rem;">
+        <h2 class="section-title">Our Trading Services</h2>
+        <div id="services" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+            <div style="background: white; padding: 2rem; border-radius: 15px; border-top: 4px solid var(--accent-gold);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">📦</div>
+                <h3>Wholesale Supply</h3>
+                <p style="color: #666;">Direct wholesale products at competitive prices for retailers and businesses</p>
+            </div>
+            <div style="background: white; padding: 2rem; border-radius: 15px; border-top: 4px solid var(--accent-teal);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌾</div>
+                <h3>Rice & Grains</h3>
+                <p style="color: #666;">Premium rice varieties, grains, and agricultural products from trusted sources</p>
+            </div>
+            <div style="background: white; padding: 2rem; border-radius: 15px; border-top: 4px solid var(--accent-gold);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
+                <h3>Product Sourcing</h3>
+                <p style="color: #666;">Find and source any product globally with competitive pricing</p>
+            </div>
+            <div style="background: white; padding: 2rem; border-radius: 15px; border-top: 4px solid var(--accent-teal);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚢</div>
+                <h3>Import/Export</h3>
+                <p style="color: #666;">Full import/export support including documentation and logistics</p>
+            </div>
+            <div style="background: white; padding: 2rem; border-radius: 15px; border-top: 4px solid var(--accent-gold);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🛒</div>
+                <h3>Marketplace Integration</h3>
+                <p style="color: #666;">Amazon & Noon supplier integration for expanded reach</p>
+            </div>
+            <div style="background: white; padding: 2rem; border-radius: 15px; border-top: 4px solid var(--accent-teal);">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">💼</div>
+                <h3>B2B Solutions</h3>
+                <p style="color: #666;">Customized bulk orders and long-term supplier relationships</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(22, 160, 133, 0.1)); padding: 60px 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title">Looking for a Product?</h2>
+            <p style="color: #666; margin-bottom: 2rem; font-size: 1.1rem;">Tell us what you need, and we'll source it for you</p>
+            <button onclick="requestSourcing()" class="btn-primary">Request Sourcing Quote</button>
+        </div>
+    </section>
+
+    <div id="quotingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeQuoting()">&times;</span>
+            <h2>Product Sourcing Request</h2>
+            <form id="quotingForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" name="product" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 8px;">
+                </div>
+                <div class="form-group">
+                    <label>Quantity Required *</label>
+                    <input type="text" name="quantity" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 8px;">
+                </div>
+                <div class="form-group">
+                    <label>Target Price Range (Optional)</label>
+                    <input type="text" name="price" placeholder="e.g., $5-$10 per unit" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 8px;">
+                </div>
+                <div class="form-group">
+                    <label>Your Email *</label>
+                    <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 8px;">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem;">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>General Trading</h4>
+                <p>Your wholesale and sourcing partner</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../index.html">Back to Souq Al Mena</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📱 <a href="https://wa.me/971502687989">+971 50 268 7989</a></p>
+                <p>📧 <a href="mailto:souqalmena@gmail.com">souqalmena@gmail.com</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Souq Al Mena. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/971502687989" class="whatsapp-float">💬</a>
+
+    <script>
+        function requestSourcing() {
+            document.getElementById('quotingModal').style.display = 'block';
+        }
+        function closeQuoting() {
+            document.getElementById('quotingModal').style.display = 'none';
+        }
+        document.getElementById('quotingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you! Your sourcing request has been received. We will contact you soon.');
+            closeQuoting();
+            this.reset();
+        });
+        window.onclick = function(event) {
+            const modal = document.getElementById('quotingModal');
+            if (event.target === modal) modal.style.display = 'none';
+        };
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

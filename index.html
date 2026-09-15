@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Souq Al Mena - UAE's Leading Multi-Business Solutions Group. General Trading, Irrigation Solutions, Digital Marketing, Business Automations & Recruitment Services.">
+    <meta name="keywords" content="Souq Al Mena, UAE trading, irrigation solutions, digital marketing, recruitment, business solutions, wholesale, product sourcing, drip irrigation, landscaping, UAE business">
+    <meta name="author" content="Souq Al Mena">
+    <meta property="og:title" content="Souq Al Mena - Multi-Business Solutions Group">
+    <meta property="og:description" content="Trade. Source. Market. Connect. Your trusted business partner in UAE providing General Trading, Irrigation Solutions, Digital Marketing & Recruitment">
+    <meta property="og:type" content="business.business">
+    <title>Souq Al Mena - UAE Trading, Irrigation Solutions & Business Services</title>
+    <link rel="canonical" href="https://www.souq-mena.com">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Souq Al Mena",
+      "image": "https://www.souq-mena.com/assets/logo.png",
+      "description": "Multi-business solutions group providing General Trading, Irrigation Solutions, Digital Marketing, Business Automations and Recruitment Services",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "AE",
+        "addressRegion": "Sharjah"
+      },
+      "telephone": "+971502687989",
+      "url": "https://www.souq-mena.com",
+      "sameAs": ["https://wa.me/971502687989"]
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">🦅 Souq Al Mena</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="https://wa.me/971502687989" class="nav-link whatsapp-nav">📱 WhatsApp</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">Trade. Source. Market. Connect.</h1>
+            <p class="hero-subtitle">Your trusted multi-business partner in the UAE. General Trading • Irrigation Solutions • Digital Marketing • Recruitment & HR</p>
+            <div class="hero-cta">
+                <button class="btn-primary" onclick="openAssistant()">Explore Solutions</button>
+                <a href="https://wa.me/971502687989?text=Hello%20Souq%20Al%20Mena%2C%20I%27m%20interested%20in%20learning%20more%20about%20your%20services." class="btn-secondary">Chat on WhatsApp</a>
+            </div>
+        </div>
+        <div class="hero-background">
+            <div class="floating-card card-1"></div>
+            <div class="floating-card card-2"></div>
+            <div class="floating-card card-3"></div>
+        </div>
+    </section>
+
+    <!-- AI Visitor Assistant Modal -->
+    <div id="assistantModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAssistant()">&times;</span>
+            <h2>Welcome to Souq Al Mena</h2>
+            <p>What would you like to explore?</p>
+            <div class="assistant-options">
+                <button onclick="navigateTo('trading/index.html', 'General Trading & Product Sourcing')">
+                    <span class="icon">📦</span>
+                    <span>General Trading</span>
+                </button>
+                <button onclick="navigateTo('gardenia/index.html', 'Gardenia Irrigation Solutions')">
+                    <span class="icon">💧</span>
+                    <span>Irrigation Solutions</span>
+                </button>
+                <button onclick="navigateTo('digital-marketing/index.html', 'Digital Marketing & E-commerce')">
+                    <span class="icon">📱</span>
+                    <span>Digital Marketing</span>
+                </button>
+                <button onclick="navigateTo('business-automations/index.html', 'Business Automations')">
+                    <span class="icon">⚙️</span>
+                    <span>Automations</span>
+                </button>
+                <button onclick="navigateTo('recruitment/index.html', 'Recruitment & HR Services')">
+                    <span class="icon">👥</span>
+                    <span>Recruitment & HR</span>
+                </button>
+                <button onclick="whatsappAssist()">
+                    <span class="icon">💬</span>
+                    <span>Talk to Us</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Business Divisions -->
+    <section class="divisions" id="divisions">
+        <h2 class="section-title">Our Business Divisions</h2>
+        <div class="divisions-grid">
+
+            <!-- General Trading -->
+            <div class="division-card" onclick="window.location.href='trading/index.html'">
+                <div class="card-icon">📦</div>
+                <h3>General Trading</h3>
+                <p class="card-subtitle">Source • Supply • Wholesale</p>
+                <p>Access international suppliers, wholesale products, rice, grains, and comprehensive procurement solutions for your business needs.</p>
+                <div class="card-features">
+                    <span class="feature">Wholesale Supply</span>
+                    <span class="feature">Product Sourcing</span>
+                    <span class="feature">Import/Export</span>
+                </div>
+                <a href="trading/index.html" class="card-link">Explore →</a>
+            </div>
+
+            <!-- Gardenia Irrigation -->
+            <div class="division-card" onclick="window.location.href='gardenia/index.html'">
+                <div class="card-icon">💧</div>
+                <h3>Gardenia Irrigation</h3>
+                <p class="card-subtitle">Water Management • Irrigation Products</p>
+                <p>Professional irrigation solutions, drip systems, sprinklers, smart controllers, and landscape irrigation products for UAE projects.</p>
+                <div class="card-features">
+                    <span class="feature">Drip Systems</span>
+                    <span class="feature">Sprinklers</span>
+                    <span class="feature">Smart Controllers</span>
+                </div>
+                <a href="gardenia/index.html" class="card-link">Explore →</a>
+            </div>
+
+            <!-- Digital Marketing -->
+            <div class="division-card" onclick="window.location.href='digital-marketing/index.html'">
+                <div class="card-icon">📱</div>
+                <h3>Digital Marketing</h3>
+                <p class="card-subtitle">Growth • Visibility • Campaigns</p>
+                <p>Social media management, online advertising, content strategies, and comprehensive digital solutions to grow your business.</p>
+                <div class="card-features">
+                    <span class="feature">Social Media</span>
+                    <span class="feature">Ad Campaigns</span>
+                    <span class="feature">E-commerce Solutions</span>
+                </div>
+                <a href="digital-marketing/index.html" class="card-link">Explore →</a>
+            </div>
+
+            <!-- Business Automations -->
+            <div class="division-card" onclick="window.location.href='business-automations/index.html'">
+                <div class="card-icon">⚙️</div>
+                <h3>Business Automations</h3>
+                <p class="card-subtitle">Efficiency • Integration • Growth</p>
+                <p>Streamline operations with automated workflows, CRM systems, lead capture, and business process optimization solutions.</p>
+                <div class="card-features">
+                    <span class="feature">Lead Capture</span>
+                    <span class="feature">CRM Workflows</span>
+                    <span class="feature">Automation</span>
+                </div>
+                <a href="business-automations/index.html" class="card-link">Explore →</a>
+            </div>
+
+            <!-- Recruitment & HR -->
+            <div class="division-card" onclick="window.location.href='recruitment/index.html'">
+                <div class="card-icon">👥</div>
+                <h3>Recruitment & HR</h3>
+                <p class="card-subtitle">Talent • Staffing • HR Solutions</p>
+                <p>Comprehensive recruitment, talent sourcing, staffing solutions, and HR resource provision for businesses across all sectors.</p>
+                <div class="card-features">
+                    <span class="feature">Candidate Sourcing</span>
+                    <span class="feature">Staffing</span>
+                    <span class="feature">HR Support</span>
+                </div>
+                <a href="recruitment/index.html" class="card-link">Explore →</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us">
+        <h2 class="section-title">Why Choose Souq Al Mena</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">🌍</div>
+                <h3>Global Reach</h3>
+                <p>Access to international suppliers and networks across Asia, Europe, and Middle East</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🤝</div>
+                <h3>B2B Expertise</h3>
+                <p>Specialized in business-to-business solutions and wholesale partnerships</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">⏱️</div>
+                <h3>Fast Response</h3>
+                <p>Quick turnaround on quotes, sourcing requests, and service inquiries</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">💼</div>
+                <h3>Professional Team</h3>
+                <p>Experienced professionals in trading, marketing, recruitment, and business solutions</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🔒</div>
+                <h3>Reliable Partner</h3>
+                <p>Licensed and trusted business partner serving UAE enterprises</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">📞</div>
+                <h3>24/7 Support</h3>
+                <p>Dedicated WhatsApp and email support for all your inquiries</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Partner with Souq Al Mena?</h2>
+        <p>Contact us today to discuss your business needs and discover how we can help</p>
+        <div class="cta-buttons">
+            <a href="contact.html" class="btn-primary">Get in Touch</a>
+            <a href="https://wa.me/971502687989?text=Hello%20Souq%20Al%20Mena%2C%20I%27d%20like%20to%20discuss%20a%20business%20opportunity." class="btn-secondary">WhatsApp Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Souq Al Mena</h4>
+                <p>Your trusted multi-business solutions partner in the UAE</p>
+                <div class="social-links">
+                    <a href="https://wa.me/971502687989" title="WhatsApp">📱</a>
+                    <a href="mailto:souqalmena@gmail.com" title="Email">✉️</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Divisions</h4>
+                <ul>
+                    <li><a href="trading/index.html">General Trading</a></li>
+                    <li><a href="gardenia/index.html">Gardenia Irrigation</a></li>
+                    <li><a href="digital-marketing/index.html">Digital Marketing</a></li>
+                    <li><a href="recruitment/index.html">Recruitment & HR</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <p>📱 <a href="https://wa.me/971502687989">+971 50 268 7989</a></p>
+                <p>📧 <a href="mailto:souqalmena@gmail.com">souqalmena@gmail.com</a></p>
+                <p>🌐 <a href="https://www.souq-mena.com" target="_blank">www.souq-mena.com</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Souq Al Mena. All rights reserved. | <a href="404.html">Sitemap</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
