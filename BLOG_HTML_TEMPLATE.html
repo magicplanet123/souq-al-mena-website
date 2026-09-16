@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="[INSERT META DESCRIPTION - 160 characters including primary keyword]">
+    <meta name="keywords" content="[INSERT PRIMARY AND SECONDARY KEYWORDS]">
+    <meta name="author" content="Souq Al Mena">
+
+    <!-- OpenGraph Tags (Social Media) -->
+    <meta property="og:title" content="[INSERT BLOG TITLE]">
+    <meta property="og:description" content="[INSERT META DESCRIPTION]">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.souq-mena.com/blog/[article-slug].html">
+    <meta property="og:image" content="https://www.souq-mena.com/blog/images/[hero-image].jpg">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="[INSERT BLOG TITLE]">
+    <meta name="twitter:description" content="[INSERT META DESCRIPTION]">
+    <meta name="twitter:image" content="https://www.souq-mena.com/blog/images/[hero-image].jpg">
+
+    <!-- Structured Data Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "[INSERT BLOG TITLE]",
+      "description": "[INSERT META DESCRIPTION]",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.souq-mena.com/blog/images/[hero-image].jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "datePublished": "[YYYY-MM-DD]",
+      "dateModified": "[YYYY-MM-DD]",
+      "author": {
+        "@type": "Organization",
+        "name": "Souq Al Mena",
+        "url": "https://www.souq-mena.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Souq Al Mena",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.souq-mena.com/logo.png",
+          "width": 200,
+          "height": 60
+        }
+      },
+      "mainEntity": {
+        "@type": "Thing",
+        "name": "[TOPIC NAME]",
+        "description": "[BRIEF TOPIC DESCRIPTION]"
+      }
+    }
+    </script>
+
+    <title>[INSERT BLOG TITLE] | Souq Al Mena Blog</title>
+    <link rel="canonical" href="https://www.souq-mena.com/blog/[article-slug].html">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        /* Blog-specific styles */
+        .blog-hero {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #c9a961 0%, #2d5a4e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .blog-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        .blog-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.3), rgba(45, 90, 78, 0.4));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .blog-hero-content {
+            text-align: center;
+            color: white;
+            z-index: 3;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .blog-hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .blog-hero-content p {
+            font-size: 1.5rem;
+            color: #f5f5f5;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-meta {
+            color: #c9a961;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        .blog-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .blog-container h2 {
+            font-size: 2.2rem;
+            color: #2d5a4e;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #c9a961;
+            padding-bottom: 0.5rem;
+        }
+
+        .blog-container h3 {
+            font-size: 1.6rem;
+            color: #c9a961;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-container p {
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .blog-image-section {
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+
+        .blog-image-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-bottom: 1rem;
+        }
+
+        .blog-image-caption {
+            font-size: 0.95rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 0.8rem;
+            border-left: 4px solid #c9a961;
+            padding-left: 1rem;
+        }
+
+        .blog-video-section {
+            margin: 2.5rem 0;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border-top: 4px solid #c9a961;
+        }
+
+        .blog-video-section h3 {
+            color: #2d5a4e;
+            margin-top: 0;
+        }
+
+        .blog-video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .blog-video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+
+        .blog-chart {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f5f5f5;
+            border-radius: 12px;
+            border-left: 5px solid #c9a961;
+        }
+
+        .blog-cta {
+            background: linear-gradient(135deg, #2d5a4e 0%, #1a3a33 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 3rem 0;
+            border-top: 4px solid #c9a961;
+        }
+
+        .blog-cta h3 {
+            color: #c9a961;
+            margin-top: 0;
+        }
+
+        .blog-cta p {
+            color: #f5f5f5;
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-cta-button {
+            display: inline-block;
+            background: #c9a961;
+            color: #0a0a0a;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .blog-cta-button:hover {
+            background: #d4b976;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(201, 169, 97, 0.3);
+        }
+
+        .blog-toc {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #c9a961;
+            margin: 2rem 0;
+        }
+
+        .blog-toc h3 {
+            color: #2d5a4e;
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .blog-toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .blog-toc li {
+            margin: 0.5rem 0;
+        }
+
+        .blog-toc a {
+            color: #c9a961;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .blog-toc a:hover {
+            color: #2d5a4e;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .blog-hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .blog-container h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">Souq Al Mena Blog</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="../blog/" class="nav-link active">Blog</a></li>
+                <li><a href="../trading/" class="nav-link">Trading</a></li>
+                <li><a href="https://wa.me/971502687989" target="_blank" rel="noopener noreferrer" class="nav-link whatsapp-nav">📱 WhatsApp</a></li>
+            </ul>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Image -->
+    <div class="blog-hero">
+        <img src="images/[hero-image].jpg" alt="[DESCRIPTIVE ALT TEXT 100-125 CHARS]">
+        <div class="blog-hero-overlay">
+            <div class="blog-hero-content">
+                <h1>[INSERT BLOG TITLE - H1]</h1>
+                <p>[INSERT SUBTITLE/TAGLINE]</p>
+                <div class="blog-meta">
+                    📅 Posted on [DATE] | ⏱️ [X] min read | 👤 By Souq Al Mena
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="blog-container">
+
+        <!-- Table of Contents (Optional but Recommended) -->
+        <div class="blog-toc">
+            <h3>📑 Table of Contents</h3>
+            <ul>
+                <li><a href="#section-1">Section 1 Title</a></li>
+                <li><a href="#section-2">Section 2 Title</a></li>
+                <li><a href="#section-3">Section 3 Title</a></li>
+                <li><a href="#section-4">Section 4 Title</a></li>
+            </ul>
+        </div>
+
+        <!-- Introduction -->
+        <p style="font-size: 1.15rem; color: #444; font-weight: 500; padding: 1.5rem; background: linear-gradient(135deg, rgba(201, 169, 97, 0.1), rgba(45, 90, 78, 0.1)); border-radius: 8px;">
+            [INSERT INTRODUCTION - 100-150 WORDS - Hook readers with why this matters to them]
+        </p>
+
+        <!-- Section 1 -->
+        <h2 id="section-1">[INSERT SECTION 1 TITLE]</h2>
+
+        <p>[INSERT SECTION 1 CONTENT - 200-300 WORDS]</p>
+
+        <!-- Image 1 -->
+        <div class="blog-image-section">
+            <img src="images/[image-name].jpg" alt="[DESCRIPTIVE ALT TEXT]">
+            <div class="blog-image-caption">
+                [INSERT CAPTION EXPLAINING THE IMAGE]
+            </div>
+        </div>
+
+        <p>[CONTINUE WITH MORE CONTENT FOR SECTION 1]</p>
+
+        <!-- Section 2 -->
+        <h2 id="section-2">[INSERT SECTION 2 TITLE]</h2>
+
+        <p>[INSERT SECTION 2 CONTENT - 200-300 WORDS]</p>
+
+        <!-- Image 2 / Chart -->
+        <div class="blog-image-section">
+            <img src="images/[image-name].jpg" alt="[DESCRIPTIVE ALT TEXT]">
+            <div class="blog-image-caption">
+                [INSERT CAPTION]
+            </div>
+        </div>
+
+        <!-- Video (Optional) -->
+        <div class="blog-video-section">
+            <h3>📹 [INSERT VIDEO TITLE]</h3>
+            <p>[BRIEF DESCRIPTION OF VIDEO CONTENT]</p>
+            <div class="blog-video-container">
+                <iframe src="https://www.youtube.com/embed/[VIDEO_ID]" allowfullscreen="" loading="lazy" title="[VIDEO TITLE]"></iframe>
+            </div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;"><em>Video Content: [Summary of key topics covered]</em></p>
+        </div>
+
+        <!-- Section 3 -->
+        <h2 id="section-3">[INSERT SECTION 3 TITLE]</h2>
+
+        <p>[INSERT SECTION 3 CONTENT - 200-300 WORDS]</p>
+
+        <!-- Image 3 -->
+        <div class="blog-image-section">
+            <img src="images/[image-name].jpg" alt="[DESCRIPTIVE ALT TEXT]">
+            <div class="blog-image-caption">
+                [INSERT CAPTION]
+            </div>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 id="section-4">[INSERT SECTION 4 TITLE]</h2>
+
+        <p>[INSERT SECTION 4 CONTENT - 200-300 WORDS]</p>
+
+        <!-- Key Takeaways or Summary -->
+        <h2>Key Takeaways</h2>
+
+        <div class="blog-chart">
+            <div style="font-weight: 600; color: #2d5a4e; margin-bottom: 1rem; font-size: 1.1rem;">Quick Summary</div>
+            <ul style="color: #555; font-weight: 500;">
+                <li>✅ [KEY POINT 1]</li>
+                <li>✅ [KEY POINT 2]</li>
+                <li>✅ [KEY POINT 3]</li>
+                <li>✅ [KEY POINT 4]</li>
+            </ul>
+        </div>
+
+        <!-- Call-to-Action Section -->
+        <div class="blog-cta">
+            <h3>[INSERT CTA HEADLINE]</h3>
+            <p>[INSERT CTA DESCRIPTION - Explain what happens when they click]</p>
+            <a href="https://wa.me/971502687989" target="_blank" rel="noopener noreferrer" class="blog-cta-button">📱 [INSERT CTA BUTTON TEXT]</a>
+            <p style="margin-top: 1.5rem; font-size: 0.95rem;">Or visit: <a href="https://www.souq-mena.com" style="color: #c9a961; text-decoration: none;">souq-mena.com</a></p>
+        </div>
+
+        <!-- Related Articles -->
+        <h2>Related Articles</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0;">
+            <div style="background: #f5f5f5; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #c9a961;">
+                <h3 style="margin-top: 0; color: #2d5a4e;">Related Article 1</h3>
+                <p style="color: #666; margin-bottom: 1rem;">Brief description of the article...</p>
+                <a href="related-article-1.html" style="color: #c9a961; font-weight: 600; text-decoration: none;">Read Article →</a>
+            </div>
+            <div style="background: #f5f5f5; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #c9a961;">
+                <h3 style="margin-top: 0; color: #2d5a4e;">Related Article 2</h3>
+                <p style="color: #666; margin-bottom: 1rem;">Brief description of the article...</p>
+                <a href="related-article-2.html" style="color: #c9a961; font-weight: 600; text-decoration: none;">Read Article →</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Souq Al Mena Blog</h4>
+                <p>Trade intelligence, market insights, and business strategies for MENA leaders</p>
+                <div class="social-links">
+                    <a href="https://wa.me/971502687989" target="_blank" rel="noopener noreferrer" title="WhatsApp">📱</a>
+                    <a href="mailto:souqalmena@gmail.com" title="Email">✉️</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../blog/">All Articles</a></li>
+                    <li><a href="../trading/">Trading Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📱 <a href="https://wa.me/971502687989" target="_blank" rel="noopener noreferrer">+971 50 268 7989</a></p>
+                <p>📧 <a href="mailto:souqalmena@gmail.com">souqalmena@gmail.com</a></p>
+                <p>🌐 <a href="https://www.souq-mena.com" target="_blank" rel="noopener noreferrer">www.souq-mena.com</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Souq Al Mena. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Floating Chat Button -->
+    <a href="https://wa.me/971502687989" target="_blank" rel="noopener noreferrer" class="whatsapp-float" title="Chat with us">💬</a>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
