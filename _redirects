@@ -1,0 +1,30 @@
+# Netlify Redirects - Preserve all old URLs
+# This file ensures 301 redirects for any URL changes
+# Protects backlinks and SEO rankings
+
+# If you had old blog URLs, map them here
+# /old-blog/*  /blog/:splat  301
+
+# Main site redirects (if domains changed)
+# Keep all main pages accessible
+
+# Default: serve index.html for routing
+/*  /index.html  200
+
+# Make sure blog pages are accessible
+/blog/*  /blog/:splat  200
+
+# Service pages
+/trading/*  /trading/:splat  200
+/gardenia/*  /gardenia/:splat  200
+/digital-marketing/*  /digital-marketing/:splat  200
+/business-automations/*  /business-automations/:splat  200
+/recruitment/*  /recruitment/:splat  200
+
+# Security headers
+/*  /index.html  200
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self' https:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'
