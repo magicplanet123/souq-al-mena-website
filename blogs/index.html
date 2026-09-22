@@ -168,50 +168,35 @@
                 const container = document.getElementById('blog-container');
                 container.innerHTML = '';
 
-                // Fetch list of blog files from the current directory
-                const response = await fetch('./');
-                const html = await response.text();
+                // Fetch manifest.json
+                const manifestResponse = await fetch('./manifest.json');
+                if (!manifestResponse.ok) {
+                    throw new Error('Failed to load manifest');
+                }
 
-                // Parse HTML to find all .html files
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'));
-                const blogFiles = links
-                    .map(a => a.href)
-                    .filter(href => href.includes('blog_') && href.endsWith('.html'))
-                    .sort()
-                    .reverse(); // Latest first
+                const manifest = await manifestResponse.json();
+                const blogs = manifest.blogs || [];
 
-                if (blogFiles.length === 0) {
+                if (blogs.length === 0) {
                     container.innerHTML = '<div class="no-blogs">No blogs found yet. Check back soon!</div>';
                     return;
                 }
 
-                // Load and parse each blog file
-                for (const blogFile of blogFiles) {
+                // Create cards from manifest
+                for (const blog of blogs) {
                     try {
-                        const blogResponse = await fetch(blogFile);
-                        const blogHtml = await blogResponse.text();
-
-                        const blogDoc = parser.parseFromString(blogHtml, 'text/html');
-
-                        // Extract metadata
-                        const title = blogDoc.querySelector('h1')?.textContent || 'Untitled Blog';
-                        const meta = blogDoc.querySelector('meta[name="description"]')?.content || 'No description';
-                        const dateElement = blogDoc.querySelector('.meta')?.textContent || 'Unknown date';
-
-                        // Create card
+                        // Create card with manifest data
                         const card = document.createElement('div');
                         card.className = 'blog-card';
                         card.innerHTML = `
                             <div class="blog-card-header">
-                                <h2>${title}</h2>
+                                <h2>${blog.title}</h2>
                             </div>
                             <div class="blog-card-content">
-                                <div class="blog-card-meta">${dateElement}</div>
-                                <div class="blog-card-description">${meta}</div>
+                                <div class="blog-card-meta">Published: ${blog.date}</div>
+                                <div class="blog-card-description">${blog.title} - Fresh insights on business automation and productivity.</div>
                                 <div class="blog-card-footer">
-                                    <button class="read-more" onclick="window.open('${blogFile}', '_blank')">
+                                    <button class="read-more" onclick="window.open('./${blog.file}', '_blank')">
                                         Read More →
                                     </button>
                                 </div>
@@ -220,7 +205,7 @@
 
                         container.appendChild(card);
                     } catch (err) {
-                        console.error(`Error loading blog ${blogFile}:`, err);
+                        console.error(`Error creating blog card:`, err);
                     }
                 }
 
