@@ -3,180 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Souq Al Mena Blog</title>
+    <title>Souq Al Mena Blog - Premium Business Content</title>
     <link rel="icon" href="https://raw.githubusercontent.com/magicplanet123/souq-al-mena-website/main/CUserssumyiOneDriveDesktopALL%20SOUQ%20AL%20MENA%20OPERATIONSassetslogo.png" type="image/png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Segoe UI; background: #f5f5f5; }
+        body { font-family: Segoe UI; background: linear-gradient(135deg, #f5f5f5 0%, #e8e4d8 100%); }
 
         nav { background: #1a1a1a; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; }
-        nav a { color: #d4af37; margin: 0 15px; text-decoration: none; }
+        nav a { color: #d4af37; margin: 0 15px; text-decoration: none; font-weight: 600; }
+        nav a:hover { color: white; }
 
-        .featured { background: #fff; padding: 40px 20px; sticky: top 60px; }
-        .featured-title { text-align: center; font-size: 2em; color: #d4af37; margin-bottom: 30px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        .featured-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 50px; }
+        header h1 { color: #d4af37; font-size: 2.5em; margin-bottom: 10px; }
+        header p { color: #555; font-size: 1.1em; }
 
-        .featured-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 4px solid #d4af37; }
-        .featured-card h2 { color: #1a73e8; padding: 20px 20px 10px; font-size: 1.4em; }
-        .featured-card p { color: #555; padding: 0 20px 15px; line-height: 1.6; }
-        .featured-card a { display: block; padding: 15px 20px; background: #d4af37; color: #1a1a1a; text-decoration: none; font-weight: 600; text-align: center; }
-        .featured-card a:hover { background: #c9a961; }
+        .blogs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
 
-        .regular { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .regular-title { font-size: 2em; color: #d4af37; margin-bottom: 30px; }
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            border-top: 5px solid #d4af37;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.3);
+        }
 
-        .blog-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 4px solid #d4af37; transition: transform 0.3s; }
-        .blog-card:hover { transform: translateY(-5px); }
-        .blog-card h3 { color: #1a73e8; padding: 20px 15px 10px; font-size: 1.1em; }
-        .blog-card p { color: #666; padding: 0 15px 15px; font-size: 0.9em; }
-        .blog-card a { display: block; padding: 12px 15px; background: #d4af37; color: #1a1a1a; text-decoration: none; font-weight: 600; text-align: center; }
-        .blog-card a:hover { background: #c9a961; }
+        .blog-card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #d4af37 0%, #c9a961 100%);
+            overflow: hidden;
+        }
 
-        @media (max-width: 1024px) { .featured-grid { grid-template-columns: 1fr; } }
+        .blog-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .blog-card-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card-title {
+            color: #2d5a4e;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .blog-card-meta {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .blog-card-excerpt {
+            color: #555;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .blog-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .read-btn {
+            display: inline-block;
+            background: #d4af37;
+            color: #1a1a1a;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .read-btn:hover {
+            background: #c9a961;
+            transform: translateX(3px);
+        }
+
+        .quality-badge {
+            background: #2d5a4e;
+            color: #c9a961;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .coming-soon {
+            background: #f9f9f9;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            border: 2px dashed #d4af37;
+            color: #999;
+        }
+
+        .coming-soon h3 {
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: #ddd;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .blogs-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
     <nav>
         <a href="/">Home</a>
         <a href="/blogs/">Blog</a>
+        <a href="/contact.html">Contact</a>
     </nav>
 
-    <div class="featured">
-        <div class="featured-title">Featured Articles</div>
+    <div class="container">
+        <header>
+            <h1>Souq Al Mena Blog</h1>
+            <p>Premium Business Intelligence & Market Insights</p>
+        </header>
 
-        <div class="featured-grid">
-            <!-- Featured 1: Rice Blog -->
-            <div class="featured-card">
-                <h2>UAE Rice Market Intelligence</h2>
-                <p>Comprehensive trade intelligence guide for MENA rice importers. Learn market dynamics, supplier analysis, and direct sourcing strategies with detailed insights on Basmati premium segments.</p>
-                <a href="../blog/rice-import-export-market.html">Read Full Article →</a>
+        <div class="blogs-grid">
+            <!-- Rice Blog - Premium Quality -->
+            <div class="blog-card">
+                <div class="blog-card-image">
+                    <img src="../blog/images/rice-trade-hero.jpg" alt="UAE Rice Market">
+                </div>
+                <div class="blog-card-content">
+                    <div class="quality-badge">Premium Article</div>
+                    <h2 class="blog-card-title">UAE Rice Import Export Market: Trade Intelligence Guide</h2>
+                    <div class="blog-card-meta">Published: June 2, 2026 • 10+ min read</div>
+                    <p class="blog-card-excerpt">
+                        Comprehensive trade intelligence guide for MENA rice importers. Learn UAE rice market dynamics, supplier analysis, Basmati premium segment strategies, compliance requirements, and direct sourcing approaches for institutional buyers in the GCC region.
+                    </p>
+                    <div class="blog-card-footer">
+                        <a href="../blog/rice-import-export-market.html" class="read-btn">Read Article →</a>
+                    </div>
+                </div>
             </div>
 
-            <!-- Featured 2: Business Automation -->
-            <div class="featured-card">
-                <h2>Business Automation Guide</h2>
-                <p>Complete guide to business automation. Increase productivity by 20-40%, reduce costs by 15-30%. Learn implementation strategies, best practices, and measure ROI within 6-12 months.</p>
-                <a href="blog-1.html">Read Full Article →</a>
-            </div>
-
-            <!-- Featured 3: Crypto Trading -->
-            <div class="featured-card">
-                <h2>Cryptocurrency Trading Signals</h2>
-                <p>Automated trading analyzes hundreds of crypto pairs 24/7. Technical analysis, risk management, and intelligent trade execution at optimal prices automatically.</p>
-                <a href="blog-5.html">Read Full Article →</a>
+            <!-- Coming Soon - Daily Premium Blogs -->
+            <div class="coming-soon">
+                <h3>New Premium Blogs</h3>
+                <p>Daily premium articles launching soon</p>
+                <p style="margin-top: 15px; font-size: 0.9em;">New high-quality blogs with comprehensive research, multiple images, SEO optimization, and market insights published daily at 8 AM UTC.</p>
             </div>
         </div>
     </div>
 
-    <div class="regular">
-        <div class="regular-title">All Articles</div>
-
-        <div class="blog-grid">
-            <div class="blog-card">
-                <h3>Digital Marketing Automation</h3>
-                <p>Marketing automation enables omnichannel campaigns with 50% higher conversion rates and personalized experiences at scale.</p>
-                <a href="blog-2.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>HR Recruitment Automation</h3>
-                <p>Recruitment streamlines hiring from job posting to onboarding. Resume parsing, candidate scoring, and interview scheduling automated.</p>
-                <a href="blog-3.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>E-Commerce Automation</h3>
-                <p>Order fulfillment, inventory management, and personalized customer experiences automated 24/7 for higher sales.</p>
-                <a href="blog-4.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Supply Chain Automation</h3>
-                <p>Demand forecasting, warehouse optimization, and real-time shipment tracking from factory to customer door.</p>
-                <a href="blog-6.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Financial Automation</h3>
-                <p>Invoice processing, expense management, and bank reconciliation automated with 99%+ accuracy.</p>
-                <a href="blog-7.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Customer Service Automation</h3>
-                <p>Chatbots handle 70-80% of inquiries 24/7. Complex issues routed to specialists automatically.</p>
-                <a href="blog-8.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Marketing Analytics Automation</h3>
-                <p>Real-time dashboards, A/B testing automation, and continuous optimization of marketing campaigns.</p>
-                <a href="blog-9.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>CMS Automation</h3>
-                <p>Content created once, published across all channels automatically with SEO optimization.</p>
-                <a href="blog-10.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Project Management Automation</h3>
-                <p>Task generation, resource allocation, and real-time project health dashboards.</p>
-                <a href="blog-11.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Sales Automation</h3>
-                <p>Lead scoring, sales workflows, and proposal generation triggered automatically.</p>
-                <a href="blog-12.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Data Entry Automation</h3>
-                <p>OCR technology extracts data with 99%+ accuracy. RPA bots enter data into systems 24/7.</p>
-                <a href="blog-13.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Email Marketing Automation</h3>
-                <p>Behavioral triggers send personalized emails automatically based on customer actions.</p>
-                <a href="blog-14.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Social Media Automation</h3>
-                <p>Content scheduled and published across all platforms simultaneously with optimized timing.</p>
-                <a href="blog-15.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Lead Generation Automation</h3>
-                <p>Multi-channel lead capture, automatic qualification, and nurturing campaigns.</p>
-                <a href="blog-16.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>CRM Automation</h3>
-                <p>All customer interactions logged automatically with relationship health predictions.</p>
-                <a href="blog-17.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>IT Operations Automation</h3>
-                <p>Infrastructure provisioning, patch management, and 99.9%+ uptime monitoring.</p>
-                <a href="blog-18.html">Read →</a>
-            </div>
-
-            <div class="blog-card">
-                <h3>Business Process Optimization</h3>
-                <p>Process mapping, efficiency improvements, and continuous optimization strategies.</p>
-                <a href="blog-19.html">Read →</a>
-            </div>
-        </div>
-    </div>
+    <footer>
+        <p>&copy; 2026 Souq Al Mena. All rights reserved. | Trade. Source. Market. Connect.</p>
+    </footer>
 </body>
 </html>
