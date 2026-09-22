@@ -3,290 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Souq Al Mena - Latest Blog Articles</title>
-    <meta name="description" content="Discover the latest articles on business automation, digital marketing, and recruitment">
-    <meta property="og:title" content="Souq Al Mena Blog">
-    <meta property="og:description" content="Explore insights on automation, marketing, and business growth">
-    <meta name="twitter:card" content="summary_large_image">
-
+    <title>Souq Al Mena Blog - Automation & Business Insights</title>
+    <meta name="description" content="Read our latest articles on business automation, digital marketing, and modern business strategies">
+    <link rel="icon" href="https://raw.githubusercontent.com/magicplanet123/souq-al-mena-website/main/CUserssumyiOneDriveDesktopALL%20SOUQ%20AL%20MENA%20OPERATIONSassetslogo.png" type="image/png">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f5f5 0%, #e8e4d8 100%); color: #333; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e4d8 100%);
-            color: #333;
-            line-height: 1.6;
-        }
+        nav { background: #1a1a1a; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        nav .nav-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px; }
+        nav a { color: #d4af37; text-decoration: none; font-size: 0.9em; transition: color 0.3s; }
+        nav a:hover { color: #fff; }
 
-        /* Navigation */
-        nav {
-            background: #1a1a1a;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        nav .container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-        }
+        header { background: linear-gradient(135deg, #d4af37 0%, #c9a961 100%); color: white; padding: 60px 20px; text-align: center; margin-bottom: 40px; }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.95; }
 
-        nav a {
-            color: #d4af37;
-            text-decoration: none;
-            font-size: 0.95em;
-            transition: color 0.3s;
-        }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px; }
 
-        nav a:hover {
-            color: #fff;
-        }
+        .blog-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; display: flex; flex-direction: column; border-top: 4px solid #d4af37; }
+        .blog-card:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(212, 175, 55, 0.3); }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        .blog-card-icon { font-size: 2.5em; padding: 20px; text-align: center; background: linear-gradient(135deg, #f5f5f5 0%, #e8e4d8 100%); border-bottom: 1px solid #ddd; }
 
-        header {
-            background: linear-gradient(135deg, #d4af37 0%, #c9a961 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        .blog-card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
 
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
+        .blog-card-title { color: #1a73e8; font-size: 1.2em; margin-bottom: 10px; font-weight: 600; line-height: 1.3; }
 
-        header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
+        .blog-card-footer { display: flex; justify-content: flex-end; gap: 10px; padding-top: 15px; border-top: 1px solid #eee; margin-top: auto; }
 
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
+        .read-more-btn { background: #d4af37; color: #1a1a1a; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 0.9em; }
+        .read-more-btn:hover { background: #c9a961; transform: translateX(3px); }
 
-        .blog-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            border-top: 4px solid #d4af37;
-        }
+        footer { background: #1a1a1a; color: #ddd; padding: 30px; text-align: center; margin-top: 60px; font-size: 0.9em; }
 
-        .blog-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.3);
-        }
-
-        .blog-card-icon {
-            font-size: 2.5em;
-            padding: 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e4d8 100%);
-            border-bottom: 1px solid #ddd;
-        }
-
-        .blog-card-content {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .blog-card-title {
-            color: #1a73e8;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .blog-card-date {
-            color: #999;
-            font-size: 0.85em;
-            margin-bottom: 10px;
-        }
-
-        .blog-card-description {
-            color: #666;
-            font-size: 0.95em;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            flex-grow: 1;
-        }
-
-        .blog-card-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-
-        .read-more-btn {
-            background: #d4af37;
-            color: #1a1a1a;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-        }
-
-        .read-more-btn:hover {
-            background: #c9a961;
-            transform: translateX(3px);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .no-blogs {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-            background: white;
-            border-radius: 8px;
-            margin: 40px 0;
-            border-top: 4px solid #d4af37;
-        }
-
-        footer {
-            background: #1a1a1a;
-            color: #ddd;
-            padding: 30px;
-            text-align: center;
-            margin-top: 60px;
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 768px) {
-            .blog-grid {
-                grid-template-columns: 1fr;
-            }
-
-            header h1 {
-                font-size: 1.8em;
-            }
-
-            nav .container {
-                flex-direction: column;
-                gap: 10px;
-                padding: 10px;
-            }
-        }
+        @media (max-width: 768px) { .blog-grid { grid-template-columns: 1fr; } header h1 { font-size: 1.8em; } nav .nav-container { gap: 10px; } }
     </style>
 </head>
 <body>
     <nav>
-        <div class="container">
-            <a href="/">🏠 Home</a>
-            <a href="/blog/">📚 Blog</a>
-            <a href="/services.html">💼 Services</a>
-            <a href="https://wa.me/971502687989">📱 WhatsApp</a>
+        <div class="nav-container">
+            <a href="/">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/services.html">Services</a>
+            <a href="/blogs/">Blog</a>
+            <a href="/contact.html">Contact</a>
+            <a href="https://wa.me/971502687989" target="_blank">WhatsApp</a>
         </div>
     </nav>
 
     <header>
         <div class="container">
-            <h1>📚 Latest Articles</h1>
-            <p>Explore insights on business automation, digital marketing, and recruitment</p>
+            <h1>Latest Articles</h1>
+            <p>Business automation, digital marketing, and modern strategies</p>
         </div>
     </header>
 
     <main class="container">
-        <div id="blog-container" class="blog-grid">
-            <div class="loading">Loading blogs...</div>
+        <div class="blog-grid">
+            <div class="blog-card">
+                <div class="blog-card-icon">🤖</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Complete Guide to Business Automation: Transform Your Workflow</div>
+                    <div class="blog-card-footer"><a href="blog-1.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">📱</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Digital Marketing Automation: Omnichannel Strategy</div>
+                    <div class="blog-card-footer"><a href="blog-2.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">👥</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">HR Recruitment Automation: Building Your Dream Team</div>
+                    <div class="blog-card-footer"><a href="blog-3.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">🛒</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">E-Commerce Automation: Maximizing Sales</div>
+                    <div class="blog-card-footer"><a href="blog-4.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">💰</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Cryptocurrency Trading Signals: Intelligent Investing</div>
+                    <div class="blog-card-footer"><a href="blog-5.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">📦</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Supply Chain Automation: Optimizing Logistics</div>
+                    <div class="blog-card-footer"><a href="blog-6.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">💼</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Financial Automation: Streamlining Accounting</div>
+                    <div class="blog-card-footer"><a href="blog-7.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">🎧</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Customer Service Automation: Excellence at Scale</div>
+                    <div class="blog-card-footer"><a href="blog-8.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">📊</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Marketing Analytics Automation: Data-Driven Decisions</div>
+                    <div class="blog-card-footer"><a href="blog-9.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">✍️</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Content Management System Automation: Publishing at Scale</div>
+                    <div class="blog-card-footer"><a href="blog-10.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">📋</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Project Management Automation: Increasing Productivity</div>
+                    <div class="blog-card-footer"><a href="blog-11.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">🎯</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Sales Automation: Closing More Deals Faster</div>
+                    <div class="blog-card-footer"><a href="blog-12.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">📝</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Data Entry Automation: Eliminating Manual Processing</div>
+                    <div class="blog-card-footer"><a href="blog-13.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">📧</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Email Marketing Automation: Personalized at Scale</div>
+                    <div class="blog-card-footer"><a href="blog-14.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">📲</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Social Media Automation: Consistent Presence Everywhere</div>
+                    <div class="blog-card-footer"><a href="blog-15.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">🔍</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Lead Generation Automation: Building Your Pipeline</div>
+                    <div class="blog-card-footer"><a href="blog-16.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">🤝</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Customer Relationship Management: Never Miss an Opportunity</div>
+                    <div class="blog-card-footer"><a href="blog-17.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">⚙️</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">IT Operations Automation: Reducing Manual Tasks</div>
+                    <div class="blog-card-footer"><a href="blog-18.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
+
+            <div class="blog-card">
+                <div class="blog-card-icon">🚀</div>
+                <div class="blog-card-content">
+                    <div class="blog-card-title">Business Process Optimization: Continuous Improvement</div>
+                    <div class="blog-card-footer"><a href="blog-19.html" class="read-more-btn">Read →</a></div>
+                </div>
+            </div>
         </div>
     </main>
 
     <footer>
         <p>&copy; 2026 Souq Al Mena. All rights reserved. | Trade. Source. Market. Connect.</p>
     </footer>
-
-    <script>
-        const ICONS = ['📝', '💡', '🚀', '📊', '🎯', '💼', '🔧', '📈', '⚙️', '🌟', '✨', '🎨', '💻', '📱', '🔍', '🌐', '🎓', '💰', '🏆'];
-
-        async function loadBlogs() {
-            try {
-                const container = document.getElementById('blog-container');
-                container.innerHTML = '';
-
-                // Fetch manifest.json
-                const manifestResponse = await fetch('./manifest.json');
-                if (!manifestResponse.ok) {
-                    throw new Error('Failed to load manifest');
-                }
-
-                const manifest = await manifestResponse.json();
-                let blogs = manifest.blogs || [];
-
-                if (blogs.length === 0) {
-                    container.innerHTML = '<div class="no-blogs">No blogs found yet. Check back soon for fresh content!</div>';
-                    return;
-                }
-
-                // Create cards from manifest
-                blogs.forEach((blog, index) => {
-                    try {
-                        const icon = ICONS[index % ICONS.length];
-
-                        const card = document.createElement('div');
-                        card.className = 'blog-card';
-                        card.innerHTML = `
-                            <div class="blog-card-icon">${icon}</div>
-                            <div class="blog-card-content">
-                                <div class="blog-card-title">${blog.title}</div>
-                                <div class="blog-card-date">📅 Published: ${blog.date}</div>
-                                <div class="blog-card-description">${blog.title} - Discover practical insights and strategies for modern business.</div>
-                                <div class="blog-card-footer">
-                                    <button class="read-more-btn" onclick="window.open('./${blog.file}', '_blank')">
-                                        Read Article →
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-
-                        container.appendChild(card);
-                    } catch (err) {
-                        console.error(`Error creating blog card:`, err);
-                    }
-                });
-
-            } catch (err) {
-                console.error('Error loading blogs:', err);
-                document.getElementById('blog-container').innerHTML =
-                    '<div class="no-blogs">Error loading blogs. Please refresh the page and try again.</div>';
-            }
-        }
-
-        // Load blogs when page loads
-        document.addEventListener('DOMContentLoaded', loadBlogs);
-    </script>
 </body>
 </html>
