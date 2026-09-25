@@ -783,6 +783,8 @@ body {
     background: #fff;
     border: 1px solid var(--border-light);
     border-radius: 15px;
+    min-width: 0;
+    overflow: hidden;
     padding: 2rem;
     text-align: center;
 }
@@ -849,6 +851,8 @@ body {
 
 .lead-table-wrap {
     margin-top: 1rem;
+    max-width: 100%;
+    min-width: 0;
     overflow-x: auto;
 }
 

@@ -314,20 +314,16 @@
         }
 
         function localLeadGenerator(query, location) {
-            const base = query.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 36) || 'mena-business';
-            const descriptors = ['Solutions', 'Trading', 'Projects', 'Services', 'Systems'];
-            return descriptors.map((descriptor, index) => {
-                const domain = `${base}-${descriptor.toLowerCase()}.com`;
-                return {
-                    company: `${query} ${descriptor}`,
-                    website: `https://${domain}`,
-                    email: `info@${domain}`,
-                    fit_score: Math.max(72, 94 - index * 4),
-                    source: 'structured candidate generator',
-                    email_verified: false,
-                    location
-                };
-            });
+            const raw = query.toLowerCase();
+            const category = /real estate|property|realty/.test(raw) ? 'property' : /e.?commerce|online store|marketplace/.test(raw) ? 'ecommerce' : /health|clinic|hospital|medical/.test(raw) ? 'healthcare' : /retail|shop|store|fashion/.test(raw) ? 'retail' : 'all';
+            const catalog = {
+                property: [['Betterhomes', 'https://www.betterhomes.com', 'info@betterhomes.com'], ['Bayut', 'https://www.bayut.com', 'info@bayut.com'], ['Asteco', 'https://www.asteco.com', 'info@asteco.com'], ['Metropolitan Group', 'https://metropolitan.realestate', 'info@metropolitan.realestate'], ['Allsopp & Allsopp', 'https://www.allsoppandallsopp.com', 'info@allsoppandallsopp.com']],
+                ecommerce: [['Noon', 'https://www.noon.com', 'care@noon.com'], ['Namshi', 'https://www.namshi.com', 'care@namshi.com'], ['Carrefour UAE', 'https://www.carrefouruae.com', 'customer.service@maf.co.ae'], ['The Luxury Closet', 'https://theluxurycloset.com', 'support@theluxurycloset.com'], ['Ounass', 'https://www.ounass.ae', 'care@ounass.ae']],
+                retail: [['Landmark Group', 'https://www.landmarkgroup.com', 'info@landmarkgroup.com'], ['Al-Futtaim Retail', 'https://www.alfuttaim.com', 'info@alfuttaim.com'], ['Lulu Hypermarket UAE', 'https://www.luluhypermarket.com', 'care@luluhypermarket.com'], ['Jumbo Electronics', 'https://www.jumbo.ae', 'info@jumbo.ae'], ['Azadea Group', 'https://www.azadeagroup.com', 'info@azadeagroup.com']],
+                healthcare: [['Aster Hospitals UAE', 'https://www.asterhospitals.ae', 'info@asterhospitals.ae'], ['NMC Healthcare', 'https://www.nmchealthcare.com', 'info@nmchealthcare.com'], ['Mediclinic Middle East', 'https://www.mediclinic.ae', 'info@mediclinic.ae'], ['Saudi German Hospital UAE', 'https://www.sghuae.com', 'info@sghuae.com'], ['Burjeel Holdings', 'https://burjeel.com', 'info@burjeel.com']]
+            };
+            const records = category === 'all' ? [...catalog.property, ...catalog.ecommerce, ...catalog.retail, ...catalog.healthcare] : catalog[category];
+            return records.slice(0, 5).map((record, index) => ({ company: record[0], website: record[1], email: record[2], fit_score: Math.max(78, 96 - index * 3), category: category === 'all' ? 'prospect' : category, source: 'UAE prospect catalog', email_verified: false, location, notice: 'Public inbox format; verify before outreach.' }));
         }
 
         async function fetchLeads(query, location) {
@@ -342,7 +338,7 @@
             } catch (_) {
                 // The local generator below keeps the static page usable when Vercel functions are unavailable.
             }
-            return { source: 'structured candidate generator', leads: localLeadGenerator(query, location), notice: 'Candidate emails are unverified until confirmed.' };
+            return { source: 'catalog', leads: localLeadGenerator(query, location), notice: 'UAE prospect catalog results; verify public inboxes before outreach.' };
         }
 
         document.getElementById('lead-capture-form')?.addEventListener('submit', async (event) => {
