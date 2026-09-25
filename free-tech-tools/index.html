@@ -76,7 +76,7 @@
                     <input id="seo-url" name="url" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url" required>
                     <button type="submit" class="btn-primary" id="seo-audit-submit">Run Free Audit</button>
                 </div>
-                <p class="tool-note">You get 3 full-site audits. Each free crawl is limited to 100 pages and runs on the secure backend.</p>
+                <p class="tool-note">Free tier: 3 full-site audit sessions per user. Each crawl checks up to 20 pages through the secure proxy.</p>
             </form>
             <div id="seo-audit-status" class="tool-status" role="status" aria-live="polite"></div>
             <div id="seo-audit-results" class="seo-results" hidden></div>
@@ -88,24 +88,25 @@
                 <article class="utility-card">
                     <div class="card-icon">🎯</div>
                     <div class="tool-title-row"><h3>Lead Capture</h3><button type="button" class="help-trigger" data-help-title="Lead Capture" data-help-copy="Enter a company website and contact details to create a structured lead record. The tool reads public metadata when the website permits browser access and lets you export the result." aria-label="How Lead Capture works">?</button></div>
-                    <p>Capture a structured prospect record from business contact data.</p>
+                    <p>Capture up to 5 lead records per free session and export them as JSON or CSV.</p>
                     <form id="lead-capture-form" class="tool-form">
                         <input id="lead-company" type="text" placeholder="Company name" aria-label="Company name" required>
                         <input id="lead-website" type="url" placeholder="https://company.com" aria-label="Company website" required>
                         <input id="lead-email" type="email" placeholder="Contact email" aria-label="Contact email" required>
                         <button type="submit" class="btn-primary utility-button">Create Lead Profile</button>
                     </form>
-                    <output id="lead-output" class="utility-output" aria-live="polite"></output>
+                    <output id="lead-output" class="utility-output" aria-live="polite">0 of 5 free leads captured</output>
                     <div id="lead-actions" class="tool-actions" hidden><button type="button" class="btn-secondary utility-button" id="lead-json-download">Download JSON</button><button type="button" class="btn-secondary utility-button" id="lead-csv-download">Download CSV</button></div>
                 </article>
 
                 <article class="utility-card">
                     <div class="card-icon">✉️</div>
                     <div class="tool-title-row"><h3>Email Outreach</h3><button type="button" class="help-trigger" data-help-title="Email Outreach" data-help-copy="Generate a personalized first-touch email from a lead and SEO opportunity. Copy the finished template or open it in your configured email client to send it." aria-label="How Email Outreach works">?</button></div>
-                    <p>Generate a personalized message and send it through your email client.</p>
+                    <p>Use your company identity to contact a target company through your email client.</p>
                     <form id="outreach-form" class="tool-form">
-                        <input id="outreach-name" type="text" placeholder="Contact name" aria-label="Contact name" required>
-                        <input id="outreach-company" type="text" placeholder="Company name" aria-label="Company name" required>
+                        <input id="outreach-name" type="text" placeholder="Your name" aria-label="Your name" required>
+                        <input id="outreach-sender" type="text" placeholder="Your company" aria-label="Your company" value="Souq Al Mena" required>
+                        <input id="outreach-company" type="text" placeholder="Target company" aria-label="Target company" required>
                         <input id="outreach-issue" type="text" placeholder="SEO opportunity" aria-label="SEO opportunity" required>
                         <button type="submit" class="btn-primary utility-button">Generate Outreach Email</button>
                     </form>

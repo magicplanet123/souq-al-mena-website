@@ -3,7 +3,8 @@
 
     const API_BASE_URL = (window.SOUQ_API_BASE || '').replace(/\/$/, '');
     const FREE_USE_LIMIT = 3;
-    const FREE_USE_KEY = 'souq-mena-free-tools-uses';
+    const FREE_USE_KEY = 'souq-mena-free-tools-uses-v2';
+    const LEAD_STORAGE_KEY = 'souq-mena-lead-records-v1';
 
     function normalizeUrl(value) {
         const candidate = value.trim();
@@ -23,17 +24,20 @@
         return { category, severity, title, description, recommendation };
     }
 
-    function getFreeUseCount() {
-        return Number.parseInt(window.localStorage.getItem(FREE_USE_KEY) || '0', 10);
+    function getFreeUseCount(tool) {
+        const counts = JSON.parse(window.localStorage.getItem(FREE_USE_KEY) || '{}');
+        return Number.parseInt(counts[tool] || '0', 10);
     }
 
-    function consumeFreeUse() {
-        const count = getFreeUseCount();
+    function consumeFreeUse(tool) {
+        const counts = JSON.parse(window.localStorage.getItem(FREE_USE_KEY) || '{}');
+        const count = getFreeUseCount(tool);
         if (count >= FREE_USE_LIMIT) {
             openToolModal('Upgrade your access', "You've reached your free audit limit. Contact our team for unlimited enterprise access.", '/contact.html');
             return false;
         }
-        window.localStorage.setItem(FREE_USE_KEY, String(count + 1));
+        counts[tool] = count + 1;
+        window.localStorage.setItem(FREE_USE_KEY, JSON.stringify(counts));
         return true;
     }
 
@@ -149,28 +153,14 @@
     }
 
     async function runBackendAudit(url) {
-        const started = await requestApi('/api/seo/crawl/', {
+        return requestApi('/api/seo', {
             method: 'POST',
             body: JSON.stringify({
                 name: `Free SEO audit: ${url}`,
                 start_url: url,
-                max_pages: 100,
-                concurrency: 4,
-                timeout: 30,
-                respect_robots_txt: true,
-                follow_redirects: true
+                max_pages: 20
             })
         });
-        for (let attempt = 0; attempt < 80; attempt += 1) {
-            await wait(attempt === 0 ? 500 : 1500);
-            const status = await requestApi(`/api/seo/crawl/${started.job_id}/`);
-            if (status.status === 'failed') throw new Error(status.error_message || 'The full-site audit failed.');
-            if (status.status === 'completed') {
-                const findings = await requestApi(`/api/seo/crawl/${started.job_id}/results/?limit=100`);
-                return { status, findings: findings.results || [] };
-            }
-        }
-        throw new Error('The audit is taking longer than expected. Check the job status and try again later.');
     }
 
     function renderCrawlerResults(audit) {
@@ -206,7 +196,7 @@
             submit.disabled = true;
             status.className = 'tool-status';
             status.textContent = 'Fetching the page and running the audit...';
-            if (!consumeFreeUse()) {
+            if (!consumeFreeUse('seo')) {
                 submit.disabled = false;
                 return;
             }
@@ -256,7 +246,7 @@
         const jsonInput = document.getElementById('json-input');
         const jsonOutput = document.getElementById('json-output');
         document.getElementById('json-format-button')?.addEventListener('click', () => {
-            if (!consumeFreeUse()) return;
+            if (!consumeFreeUse('utilities')) return;
             try {
                 jsonOutput.textContent = JSON.stringify(JSON.parse(jsonInput.value), null, 2);
                 jsonOutput.className = 'utility-output utility-output-success';
@@ -270,7 +260,7 @@
         const textOutput = document.getElementById('text-output');
         let textCountStarted = false;
         textInput?.addEventListener('input', () => {
-            if (!textCountStarted && !consumeFreeUse()) return;
+            if (!textCountStarted && !consumeFreeUse('utilities')) return;
             textCountStarted = true;
             const value = textInput.value.trim();
             textOutput.textContent = `${value ? value.split(/\s+/).length : 0} words · ${textInput.value.length} characters`;
@@ -279,15 +269,22 @@
         const urlInput = document.getElementById('url-input');
         const urlOutput = document.getElementById('url-output');
         document.getElementById('url-encode-button')?.addEventListener('click', () => {
-            if (!consumeFreeUse()) return;
+            if (!consumeFreeUse('utilities')) return;
             urlOutput.textContent = encodeURIComponent(urlInput.value);
             urlOutput.className = 'utility-output utility-output-success';
         });
     }
 
     function initializeSuiteTools() {
-        let latestLead = null;
         let latestEmail = null;
+        let leadSessionStarted = false;
+        let latestLeads = [];
+        try {
+            latestLeads = JSON.parse(window.localStorage.getItem(LEAD_STORAGE_KEY) || '[]');
+            if (!Array.isArray(latestLeads)) latestLeads = [];
+        } catch (_) {
+            latestLeads = [];
+        }
 
         function downloadFile(filename, content, type) {
             const link = document.createElement('a');
@@ -321,8 +318,16 @@
             return data;
         }
 
+        function renderLeadCount() {
+            document.getElementById('lead-output').textContent = `${latestLeads.length} of 5 free leads captured`;
+        }
+
         document.getElementById('lead-capture-form')?.addEventListener('submit', async (event) => {
             event.preventDefault();
+            if (latestLeads.length >= 5) {
+                openToolModal('Free lead limit reached', 'You can capture up to 5 leads in the free tier. Contact our team for unlimited enterprise access.', '/contact.html');
+                return;
+            }
             const company = document.getElementById('lead-company').value.trim();
             let website;
             try {
@@ -332,7 +337,10 @@
                 document.getElementById('lead-output').className = 'utility-output utility-output-error';
                 return;
             }
-            if (!consumeFreeUse()) return;
+            if (!leadSessionStarted) {
+                if (!consumeFreeUse('leads')) return;
+                leadSessionStarted = true;
+            }
             const email = document.getElementById('lead-email').value.trim();
             const output = document.getElementById('lead-output');
             output.textContent = 'Reading public website metadata...';
@@ -344,7 +352,7 @@
             } catch (error) {
                 metadataNotice = ` Public metadata could not be read: ${error.message}`;
             }
-            latestLead = {
+            const lead = {
                 company,
                 website,
                 email,
@@ -352,20 +360,24 @@
                 captured_at: new Date().toISOString(),
                 metadata_notice: metadataNotice || null
             };
-            output.textContent = `${company} · ${email} · ${website}${metadata.title ? ` · ${metadata.title}` : ''}.${metadataNotice}`;
+            latestLeads.push(lead);
+            window.localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(latestLeads));
+            output.textContent = `${company} · ${email} · ${website}${metadata.title ? ` · ${metadata.title}` : ''}${metadataNotice}. ${latestLeads.length} of 5 free leads captured.`;
             output.className = metadataNotice ? 'utility-output utility-output-error' : 'utility-output utility-output-success';
             document.getElementById('lead-actions').hidden = false;
+            event.target.reset();
         });
 
         document.getElementById('outreach-form')?.addEventListener('submit', (event) => {
             event.preventDefault();
-            if (!consumeFreeUse()) return;
+            if (!consumeFreeUse('outreach')) return;
             const name = document.getElementById('outreach-name').value.trim();
+            const sender = document.getElementById('outreach-sender').value.trim();
             const company = document.getElementById('outreach-company').value.trim();
             const opportunity = document.getElementById('outreach-issue').value.trim();
             const subject = `A quick idea for ${company}`;
-            const body = `Hi ${name},\n\nI noticed an opportunity around ${opportunity}. Souq Al Mena can help turn this into a practical growth plan. Would a short conversation be useful?\n\nRegards,\nSouq Al Mena`;
-            latestEmail = { subject, body };
+            const body = `Hi ${name},\n\nI noticed an opportunity around ${opportunity}. ${sender} can help turn this into a practical growth plan. Would a short conversation be useful?\n\nRegards,\n${sender}`;
+            latestEmail = { subject, body, sender, company };
             document.getElementById('outreach-output').textContent = `Subject: ${subject}\n\n${body}`;
             document.getElementById('outreach-output').className = 'utility-output utility-output-success';
             document.getElementById('outreach-actions').hidden = false;
@@ -373,12 +385,13 @@
         });
 
         document.getElementById('lead-json-download')?.addEventListener('click', () => {
-            if (latestLead) downloadFile('souq-mena-lead.json', JSON.stringify(latestLead, null, 2), 'application/json');
+            if (latestLeads.length) downloadFile('souq-mena-leads.json', JSON.stringify(latestLeads, null, 2), 'application/json');
         });
         document.getElementById('lead-csv-download')?.addEventListener('click', () => {
-            if (!latestLead) return;
-            const row = [latestLead.company, latestLead.website, latestLead.email, latestLead.metadata.title || '', latestLead.metadata.description || '', latestLead.captured_at];
-            downloadFile('souq-mena-lead.csv', `company,website,email,title,description,captured_at\n${row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')}\n`, 'text/csv');
+            if (!latestLeads.length) return;
+            const header = 'company,website,email,title,description,captured_at\n';
+            const rows = latestLeads.map((lead) => [lead.company, lead.website, lead.email, lead.metadata.title || '', lead.metadata.description || '', lead.captured_at].map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\n');
+            downloadFile('souq-mena-leads.csv', `${header}${rows}\n`, 'text/csv');
         });
         document.getElementById('outreach-copy')?.addEventListener('click', async () => {
             if (!latestEmail) return;
@@ -389,6 +402,8 @@
                 document.getElementById('outreach-output').textContent += `\n\n${error.message}`;
             }
         });
+        renderLeadCount();
+        if (latestLeads.length) document.getElementById('lead-actions').hidden = false;
     }
 
     if (typeof window !== 'undefined') {
