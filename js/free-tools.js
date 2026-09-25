@@ -291,10 +291,13 @@
 
         function downloadFile(filename, content, type) {
             const link = document.createElement('a');
-            link.href = URL.createObjectURL(new Blob([content], { type }));
+            const objectUrl = URL.createObjectURL(new Blob([content], { type }));
+            link.href = objectUrl;
             link.download = filename;
+            document.body.appendChild(link);
             link.click();
-            URL.revokeObjectURL(link.href);
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
         }
 
         async function copyText(text) {
@@ -312,21 +315,10 @@
         }
 
         async function fetchLeadMetadata(website) {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 10000);
-            try {
-                const response = await fetch(website, { mode: 'cors', signal: controller.signal });
-                if (!response.ok) throw new Error(`Website returned HTTP ${response.status}.`);
-                const html = await response.text();
-                const parsed = new DOMParser().parseFromString(html, 'text/html');
-                return {
-                    title: parsed.querySelector('title')?.textContent.trim() || '',
-                    description: parsed.querySelector('meta[name="description"]')?.getAttribute('content')?.trim() || '',
-                    h1: parsed.querySelector('h1')?.textContent.trim() || ''
-                };
-            } finally {
-                clearTimeout(timeout);
-            }
+            const response = await fetch(`/api/metadata?url=${encodeURIComponent(website)}`, { headers: { Accept: 'application/json' } });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.error || `Metadata service returned HTTP ${response.status}.`);
+            return data;
         }
 
         document.getElementById('lead-capture-form')?.addEventListener('submit', async (event) => {
