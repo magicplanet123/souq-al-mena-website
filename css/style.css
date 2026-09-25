@@ -797,6 +797,27 @@ body {
     margin-bottom: 1rem;
 }
 
+.tool-form {
+    display: grid;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.tool-form input {
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font: inherit;
+    min-width: 0;
+    padding: 0.75rem;
+    width: 100%;
+}
+
+.tool-form input:focus {
+    border-color: var(--accent-gold);
+    outline: 2px solid rgba(201, 169, 97, 0.25);
+    outline-offset: 1px;
+}
+
 .utility-input {
     border: 1px solid var(--border-light);
     border-radius: 8px;

@@ -4,6 +4,8 @@
     const MAX_AUDIT_BYTES = 3 * 1024 * 1024;
     const REQUEST_TIMEOUT_MS = 15000;
     const API_BASE_URL = (window.SOUQ_API_BASE || '').replace(/\/$/, '');
+    const FREE_USE_LIMIT = 3;
+    const FREE_USE_KEY = 'souq-mena-free-tools-uses';
 
     function normalizeUrl(value) {
         const candidate = value.trim();
@@ -21,6 +23,20 @@
 
     function issue(category, severity, title, description, recommendation) {
         return { category, severity, title, description, recommendation };
+    }
+
+    function getFreeUseCount() {
+        return Number.parseInt(window.localStorage.getItem(FREE_USE_KEY) || '0', 10);
+    }
+
+    function consumeFreeUse() {
+        const count = getFreeUseCount();
+        if (count >= FREE_USE_LIMIT) {
+            openToolModal('Upgrade your access', "You've reached your free audit limit. Contact our team for unlimited enterprise access.", '/contact.html');
+            return false;
+        }
+        window.localStorage.setItem(FREE_USE_KEY, String(count + 1));
+        return true;
     }
 
     function auditHtml(html, pageUrl, statusCode) {
@@ -159,6 +175,16 @@
         throw new Error('The audit is taking longer than expected. Check the job status and try again later.');
     }
 
+    function simulateSeoAudit(url) {
+        const sampleHtml = `<html><head><title>Demo audit for ${escapeHtml(url)}</title><meta name="description" content="A local demo result for the MENA Free Tech Tools SEO audit experience."><link rel="canonical" href="${escapeHtml(url)}"></head><body><h1>Demo SEO audit</h1><p>This result is a local simulation because the crawler API is unavailable.</p></body></html>`;
+        const result = auditHtml(sampleHtml, url, 200);
+        return {
+            status: { pages_crawled: 1 },
+            findings: [{ url, error_count: result.errors, warning_count: result.warnings, info_count: result.infos }],
+            simulated: true
+        };
+    }
+
     function renderCrawlerResults(audit) {
         const resultNode = document.getElementById('seo-audit-results');
         if (!resultNode) return;
@@ -192,6 +218,10 @@
             submit.disabled = true;
             status.className = 'tool-status';
             status.textContent = 'Fetching the page and running the audit...';
+            if (!consumeFreeUse()) {
+                submit.disabled = false;
+                return;
+            }
             try {
                 renderCrawlerResults(await runBackendAudit(url));
                 status.className = 'tool-status tool-status-success';
@@ -204,10 +234,9 @@
                     submit.disabled = false;
                     return;
                 }
-                status.className = 'tool-status tool-status-error';
-                status.textContent = error.name === 'AbortError'
-                    ? 'The request timed out. Try a smaller or faster page.'
-                    : `${error.message} Confirm the crawler API is online and configured for this website.`;
+                renderCrawlerResults(simulateSeoAudit(url));
+                status.className = 'tool-status tool-status-success';
+                status.textContent = 'Demo mode: the crawler API is unavailable, so this local sample result was generated without contacting the target site.';
             } finally {
                 submit.disabled = false;
             }
@@ -238,6 +267,7 @@
         const jsonInput = document.getElementById('json-input');
         const jsonOutput = document.getElementById('json-output');
         document.getElementById('json-format-button')?.addEventListener('click', () => {
+            if (!consumeFreeUse()) return;
             try {
                 jsonOutput.textContent = JSON.stringify(JSON.parse(jsonInput.value), null, 2);
                 jsonOutput.className = 'utility-output utility-output-success';
@@ -249,7 +279,10 @@
 
         const textInput = document.getElementById('text-input');
         const textOutput = document.getElementById('text-output');
+        let textCountStarted = false;
         textInput?.addEventListener('input', () => {
+            if (!textCountStarted && !consumeFreeUse()) return;
+            textCountStarted = true;
             const value = textInput.value.trim();
             textOutput.textContent = `${value ? value.split(/\s+/).length : 0} words · ${textInput.value.length} characters`;
         });
@@ -257,8 +290,32 @@
         const urlInput = document.getElementById('url-input');
         const urlOutput = document.getElementById('url-output');
         document.getElementById('url-encode-button')?.addEventListener('click', () => {
+            if (!consumeFreeUse()) return;
             urlOutput.textContent = encodeURIComponent(urlInput.value);
             urlOutput.className = 'utility-output utility-output-success';
+        });
+    }
+
+    function initializeSuiteTools() {
+        document.getElementById('lead-capture-form')?.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (!consumeFreeUse()) return;
+            const company = document.getElementById('lead-company').value.trim();
+            const website = document.getElementById('lead-website').value.trim();
+            const email = document.getElementById('lead-email').value.trim();
+            const score = Math.min(100, 40 + (website.startsWith('https://') ? 20 : 0) + (email.includes('@') ? 20 : 0) + (company.length > 2 ? 20 : 0));
+            document.getElementById('lead-output').textContent = `Demo lead profile: ${company} · ${website} · ${email} · fit score ${score}/100. Nothing was saved or sent.`;
+            document.getElementById('lead-output').className = 'utility-output utility-output-success';
+        });
+
+        document.getElementById('outreach-form')?.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (!consumeFreeUse()) return;
+            const name = document.getElementById('outreach-name').value.trim();
+            const company = document.getElementById('outreach-company').value.trim();
+            const opportunity = document.getElementById('outreach-issue').value.trim();
+            document.getElementById('outreach-output').textContent = `Subject: A quick idea for ${company}\n\nHi ${name},\n\nI noticed an opportunity around ${opportunity}. Souq Al Mena can help turn this into a practical growth plan. Would a short conversation be useful?\n\nDemo draft only - no email was sent.`;
+            document.getElementById('outreach-output').className = 'utility-output utility-output-success';
         });
     }
 
@@ -267,6 +324,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             initializeAudit();
             initializeUtilities();
+            initializeSuiteTools();
             initializeHelpAndUpgrade();
         });
     }
