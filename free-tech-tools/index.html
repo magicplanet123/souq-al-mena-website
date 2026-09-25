@@ -87,13 +87,12 @@
             <div class="divisions-grid">
                 <article class="utility-card">
                     <div class="card-icon">🎯</div>
-                    <div class="tool-title-row"><h3>Lead Capture</h3><button type="button" class="help-trigger" data-help-title="Lead Capture" data-help-copy="Enter a company website and contact details to create a structured lead record. The tool reads public metadata when the website permits browser access and lets you export the result." aria-label="How Lead Capture works">?</button></div>
-                    <p>Capture at least 5 qualified records from a company or keyword and export them as JSON or CSV.</p>
+                    <div class="tool-title-row"><h3>Lead Capture</h3><button type="button" class="help-trigger" data-help-title="Lead Capture" data-help-copy="Enter a niche and location to generate five structured candidate leads. If an Apify actor is configured, live results are used; otherwise the tool creates clearly marked unverified candidates with generic business inboxes." aria-label="How Lead Capture works">?</button></div>
+                    <p>Generate at least 5 structured candidate leads from a niche or keyword and export them as JSON or CSV.</p>
                     <form id="lead-capture-form" class="tool-form">
-                        <input id="lead-query" type="text" placeholder="Company or keyword" aria-label="Company or keyword" required>
-                        <input id="lead-website" type="url" placeholder="https://company.com (optional)" aria-label="Company website">
-                        <textarea id="lead-emails" class="utility-input" rows="5" placeholder="Paste at least 5 real contact emails, one per line" aria-label="Contact emails" required></textarea>
-                        <button type="submit" class="btn-primary utility-button">Create Lead Profile</button>
+                        <input id="lead-query" type="text" placeholder="Target niche or keyword" aria-label="Target niche or keyword" required>
+                        <input id="lead-location" type="text" placeholder="Location (e.g. UAE)" aria-label="Lead location" value="MENA" required>
+                        <button type="submit" class="btn-primary utility-button">Generate 5 Leads</button>
                     </form>
                     <output id="lead-output" class="utility-output" aria-live="polite">No leads captured yet</output>
                     <div id="lead-table-wrap" class="lead-table-wrap" hidden></div>

@@ -873,6 +873,13 @@ body {
     font-weight: 700;
 }
 
+.unverified-label {
+    color: #9a6b00;
+    display: block;
+    font-size: 0.7rem;
+    margin-top: 0.2rem;
+}
+
 .roadmap-section {
     background: #f7f7f7;
     padding: 70px 2rem;

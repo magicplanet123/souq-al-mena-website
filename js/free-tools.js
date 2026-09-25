@@ -3,7 +3,7 @@
 
     const FREE_USE_LIMIT = 3;
     const FREE_USE_KEY = 'souq-mena-free-tools-uses-v2';
-    const LEAD_STORAGE_KEY = 'souq-mena-lead-records-v1';
+    const LEAD_STORAGE_KEY = 'souq-mena-lead-records-v2';
 
     function normalizeUrl(value) {
         const candidate = value.trim();
@@ -309,8 +309,40 @@
 
         function renderLeadTable() {
             const table = document.getElementById('lead-table-wrap');
-            table.innerHTML = `<table class="lead-table"><thead><tr><th>Company Name</th><th>Website URL</th><th>Contact Email</th><th>Fit Score</th></tr></thead><tbody>${latestLeads.map((lead) => `<tr><td>${escapeHtml(lead.company)}</td><td>${escapeHtml(lead.website || 'Not provided')}</td><td>${escapeHtml(lead.email)}</td><td>${lead.fit_score}/100</td></tr>`).join('')}</tbody></table>`;
+            table.innerHTML = `<table class="lead-table"><thead><tr><th>Company Name</th><th>Website URL</th><th>Contact Email</th><th>Fit Score</th></tr></thead><tbody>${latestLeads.map((lead) => `<tr><td>${escapeHtml(lead.company)}</td><td>${escapeHtml(lead.website || 'Not provided')}</td><td>${escapeHtml(lead.email)}${lead.email_verified === false ? '<small class="unverified-label">unverified</small>' : ''}</td><td>${lead.fit_score}/100</td></tr>`).join('')}</tbody></table>`;
             table.hidden = false;
+        }
+
+        function localLeadGenerator(query, location) {
+            const base = query.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 36) || 'mena-business';
+            const descriptors = ['Solutions', 'Trading', 'Projects', 'Services', 'Systems'];
+            return descriptors.map((descriptor, index) => {
+                const domain = `${base}-${descriptor.toLowerCase()}.com`;
+                return {
+                    company: `${query} ${descriptor}`,
+                    website: `https://${domain}`,
+                    email: `info@${domain}`,
+                    fit_score: Math.max(72, 94 - index * 4),
+                    source: 'structured candidate generator',
+                    email_verified: false,
+                    location
+                };
+            });
+        }
+
+        async function fetchLeads(query, location) {
+            if (['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+                return { source: 'structured candidate generator', leads: localLeadGenerator(query, location), notice: 'Candidate emails are unverified until confirmed.' };
+            }
+            try {
+                const response = await fetch(`/api/leads?keyword=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}`, { headers: { Accept: 'application/json' } });
+                if (!response.ok) throw new Error(`Lead service returned HTTP ${response.status}.`);
+                const data = await response.json();
+                if (Array.isArray(data.leads) && data.leads.length >= 5) return data;
+            } catch (_) {
+                // The local generator below keeps the static page usable when Vercel functions are unavailable.
+            }
+            return { source: 'structured candidate generator', leads: localLeadGenerator(query, location), notice: 'Candidate emails are unverified until confirmed.' };
         }
 
         document.getElementById('lead-capture-form')?.addEventListener('submit', async (event) => {
@@ -320,32 +352,19 @@
                 return;
             }
             const query = document.getElementById('lead-query').value.trim();
-            let website;
-            try {
-                website = normalizeUrl(document.getElementById('lead-website').value);
-            } catch (error) {
-                website = '';
-            }
-            const emails = [...new Set(document.getElementById('lead-emails').value.split(/[\n,;]+/).map((email) => email.trim().toLowerCase()).filter((email) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)))];
-            if (emails.length < 5) {
-                document.getElementById('lead-output').textContent = 'Enter at least 5 valid contact email addresses, one per line.';
-                document.getElementById('lead-output').className = 'utility-output utility-output-error';
-                return;
-            }
+            const location = document.getElementById('lead-location').value.trim();
             if (!leadSessionStarted) {
                 if (!consumeFreeUse('leads')) return;
                 leadSessionStarted = true;
             }
-            latestLeads = emails.slice(0, 5).map((email, index) => ({
-                company: emails.length === 1 ? query : `${query} Prospect ${index + 1}`,
-                website,
-                email,
-                fit_score: Math.min(100, 70 + (website ? 15 : 0) + (email.endsWith('.com') ? 10 : 0) + (query.length > 2 ? 5 : 0)),
-                captured_at: new Date().toISOString()
-            }));
+            const output = document.getElementById('lead-output');
+            output.textContent = 'Finding candidate businesses...';
+            output.className = 'utility-output';
+            const generated = await fetchLeads(query, location);
+            latestLeads = generated.leads.slice(0, 5).map((lead) => ({ ...lead, captured_at: new Date().toISOString() }));
             window.localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(latestLeads));
-            document.getElementById('lead-output').textContent = `${latestLeads.length} qualified leads captured for “${query}”.`;
-            document.getElementById('lead-output').className = 'utility-output utility-output-success';
+            output.textContent = `${latestLeads.length} candidate leads generated for “${query}” in ${location}. ${generated.notice || 'Live results returned by Apify.'}`;
+            output.className = generated.source === 'apify' ? 'utility-output utility-output-success' : 'utility-output utility-output-error';
             renderLeadTable();
             document.getElementById('lead-actions').hidden = false;
             event.target.reset();
@@ -359,7 +378,7 @@
             const company = document.getElementById('outreach-company').value.trim();
             const opportunity = document.getElementById('outreach-issue').value.trim();
             const subject = `A quick idea for ${company}`;
-            const body = `Hi ${name},\n\nI noticed an opportunity around ${opportunity}. ${sender} can help turn this into a practical growth plan. Would a short conversation be useful?\n\nRegards,\n${sender}`;
+            const body = `Hi ${name},\n\nI noticed an opportunity around ${opportunity} at ${company}. This is often a practical way to improve visibility and create more qualified enquiries.\n\n${sender} helps MENA businesses turn technical gaps into focused growth plans, with clear priorities and measurable next steps.\n\nWould you be open to a 15-minute conversation next week so we can share two ideas specific to ${company}?\n\nRegards,\n${sender}`;
             latestEmail = { subject, body, sender, company };
             document.getElementById('outreach-output').textContent = `Subject: ${subject}\n\n${body}`;
             document.getElementById('outreach-output').className = 'utility-output utility-output-success';
@@ -372,8 +391,8 @@
         });
         document.getElementById('lead-csv-download')?.addEventListener('click', () => {
             if (!latestLeads.length) return;
-            const header = 'company,website,email,fit_score,captured_at\n';
-            const rows = latestLeads.map((lead) => [lead.company, lead.website, lead.email, lead.fit_score, lead.captured_at].map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const header = 'company,website,email,fit_score,email_verified,source,captured_at\n';
+            const rows = latestLeads.map((lead) => [lead.company, lead.website, lead.email, lead.fit_score, lead.email_verified, lead.source, lead.captured_at].map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\n');
             downloadFile('souq-mena-leads.csv', `${header}${rows}\n`, 'text/csv');
         });
         document.getElementById('outreach-copy')?.addEventListener('click', async () => {
