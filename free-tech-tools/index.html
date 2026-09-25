@@ -50,68 +50,86 @@
     </section>
 
     <main>
-        <section class="divisions" id="tool-categories">
-            <h2 class="section-title">Free Tools for Getting More Done</h2>
+        <section class="seo-tool-shell" id="seo-audit">
+            <div class="seo-tool-heading">
+                <div>
+                    <p class="eyebrow">Primary tool</p>
+                    <h2>SEO Website Audit</h2>
+                    <p>Run a focused technical check for titles, descriptions, headings, content, images, links, canonical tags, and structured data.</p>
+                </div>
+                <span class="pricing-badge">Freemium</span>
+            </div>
+            <form id="seo-audit-form" class="seo-audit-form">
+                <label for="seo-url">Website URL</label>
+                <div class="seo-input-row">
+                    <input id="seo-url" name="url" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url" required>
+                    <button type="submit" class="btn-primary" id="seo-audit-submit">Run Free Audit</button>
+                </div>
+                <p class="tool-note">Free audits analyze one page at a time. The target website must allow browser access (CORS).</p>
+            </form>
+            <div id="seo-audit-status" class="tool-status" role="status" aria-live="polite"></div>
+            <div id="seo-audit-results" class="seo-results" hidden></div>
+        </section>
+
+        <section class="divisions utility-section" id="tool-categories">
+            <h2 class="section-title">Free Utilities</h2>
             <div class="divisions-grid">
-                <article class="division-card">
-                    <div class="card-icon">🧑‍💻</div>
-                    <h3>Developer Tools</h3>
-                    <p class="card-subtitle">Build • Test • Ship</p>
-                    <p>Useful utilities for formatting, inspecting, converting, and testing code and data during everyday development.</p>
-                    <div class="card-features">
-                        <span class="feature">JSON Utilities</span>
-                        <span class="feature">API Helpers</span>
-                        <span class="feature">Code Tools</span>
-                    </div>
-                    <span class="card-link">Coming soon</span>
+                <article class="utility-card">
+                    <div class="card-icon">{ }</div>
+                    <h3>JSON Formatter</h3>
+                    <p>Format and validate JSON directly in your browser.</p>
+                    <textarea id="json-input" class="utility-input" rows="4" placeholder='{"name":"Souq Al Mena"}'></textarea>
+                    <button type="button" class="btn-primary utility-button" id="json-format-button">Format JSON</button>
+                    <output id="json-output" class="utility-output" aria-live="polite"></output>
                 </article>
 
-                <article class="division-card">
-                    <div class="card-icon">📊</div>
-                    <h3>Business Utilities</h3>
-                    <p class="card-subtitle">Plan • Organize • Grow</p>
-                    <p>Simple tools to help MENA businesses estimate, compare, plan, and make better operational decisions.</p>
-                    <div class="card-features">
-                        <span class="feature">Calculators</span>
-                        <span class="feature">Planners</span>
-                        <span class="feature">Generators</span>
-                    </div>
-                    <span class="card-link">Coming soon</span>
+                <article class="utility-card">
+                    <div class="card-icon">Aa</div>
+                    <h3>Text Counter</h3>
+                    <p>Count words and characters for content planning.</p>
+                    <textarea id="text-input" class="utility-input" rows="4" placeholder="Paste your text here"></textarea>
+                    <output id="text-output" class="utility-output" aria-live="polite">0 words · 0 characters</output>
                 </article>
 
-                <article class="division-card">
-                    <div class="card-icon">🌐</div>
-                    <h3>Free API Resources</h3>
-                    <p class="card-subtitle">Connect • Automate • Explore</p>
-                    <p>A curated directory of free and open endpoints for prototypes, integrations, learning projects, and automation.</p>
-                    <div class="card-features">
-                        <span class="feature">Open Data</span>
-                        <span class="feature">No-Code Friendly</span>
-                        <span class="feature">API Directory</span>
-                    </div>
-                    <span class="card-link">Coming soon</span>
+                <article class="utility-card">
+                    <div class="card-icon">🔗</div>
+                    <h3>URL Encoder</h3>
+                    <p>Encode query text safely for links and API requests.</p>
+                    <textarea id="url-input" class="utility-input" rows="4" placeholder="MENA free tech tools"></textarea>
+                    <button type="button" class="btn-primary utility-button" id="url-encode-button">Encode URL Text</button>
+                    <output id="url-output" class="utility-output" aria-live="polite"></output>
                 </article>
             </div>
         </section>
 
-        <section class="why-choose-us">
-            <h2 class="section-title">Built for the MENA Context</h2>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">🆓</div>
-                    <h3>Free to Start</h3>
-                    <p>Resources selected for practical use without paid subscriptions or unnecessary barriers.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🌍</div>
-                    <h3>Region-Aware</h3>
-                    <p>Tools and references chosen with MENA businesses, creators, and developers in mind.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🔎</div>
-                    <h3>Curated</h3>
-                    <p>Focused, useful resources instead of an endless list of links that are hard to evaluate.</p>
-                </div>
+        <section class="roadmap-section">
+            <div class="roadmap-heading">
+                <p class="eyebrow">The roadmap</p>
+                <h2>More tools are on the way</h2>
+                <p>We are curating practical, free resources for businesses, creators, and developers across MENA.</p>
+            </div>
+            <div class="divisions-grid">
+                <article class="division-card roadmap-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Business Utilities</h3>
+                    <p class="card-subtitle">Plan • Organize • Grow</p>
+                    <p>Calculators, planners, and generators for everyday business decisions.</p>
+                    <span class="card-link">Coming soon</span>
+                </article>
+                <article class="division-card roadmap-card">
+                    <div class="card-icon">🌐</div>
+                    <h3>Free API Resources</h3>
+                    <p class="card-subtitle">Connect • Automate • Explore</p>
+                    <p>A curated directory of free and open endpoints for prototypes and integrations.</p>
+                    <span class="card-link">Coming soon</span>
+                </article>
+                <article class="division-card roadmap-card">
+                    <div class="card-icon">🧑‍💻</div>
+                    <h3>Developer Workbench</h3>
+                    <p class="card-subtitle">Build • Test • Ship</p>
+                    <p>More browser-based utilities for inspecting, converting, and testing code.</p>
+                    <span class="card-link">Coming soon</span>
+                </article>
             </div>
         </section>
     </main>
@@ -163,5 +181,6 @@
     </footer>
 
     <script src="../js/main.js"></script>
+    <script src="../js/free-tools.js"></script>
 </body>
 </html>
