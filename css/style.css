@@ -847,6 +847,32 @@ body {
     white-space: pre-wrap;
 }
 
+.lead-table-wrap {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.lead-table {
+    border-collapse: collapse;
+    color: #555;
+    font-size: 0.85rem;
+    min-width: 640px;
+    text-align: left;
+    width: 100%;
+}
+
+.lead-table th,
+.lead-table td {
+    border-bottom: 1px solid var(--border-light);
+    padding: 0.65rem;
+    vertical-align: top;
+}
+
+.lead-table th {
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
 .roadmap-section {
     background: #f7f7f7;
     padding: 70px 2rem;

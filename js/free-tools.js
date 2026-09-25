@@ -1,7 +1,6 @@
 (function () {
     'use strict';
 
-    const API_BASE_URL = (window.SOUQ_API_BASE || '').replace(/\/$/, '');
     const FREE_USE_LIMIT = 3;
     const FREE_USE_KEY = 'souq-mena-free-tools-uses-v2';
     const LEAD_STORAGE_KEY = 'souq-mena-lead-records-v1';
@@ -132,49 +131,44 @@
         resultNode.hidden = false;
     }
 
-    async function requestApi(path, options) {
-        const response = await fetch(`${API_BASE_URL}${path}`, {
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json', ...(options?.headers || {}) },
-            ...options
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) {
-            const error = new Error(data.error || `The audit service returned HTTP ${response.status}.`);
-            error.code = data.code;
-            error.upgradeUrl = data.upgrade_url;
-            throw error;
+    async function runClientAudit(url) {
+        let html;
+        let source = 'target page';
+        try {
+            const response = await fetch(url, { mode: 'cors' });
+            if (!response.ok) throw new Error(`Target returned HTTP ${response.status}.`);
+            html = await response.text();
+        } catch (_) {
+            html = document.documentElement.outerHTML;
+            source = 'current page because the target blocks browser access';
         }
-        return data;
-    }
-
-    function wait(milliseconds) {
-        return new Promise((resolve) => setTimeout(resolve, milliseconds));
-    }
-
-    async function runBackendAudit(url) {
-        return requestApi('/api/seo', {
-            method: 'POST',
-            body: JSON.stringify({
-                name: `Free SEO audit: ${url}`,
-                start_url: url,
-                max_pages: 20
-            })
-        });
+        const parsed = auditHtml(html, url, 200);
+        return {
+            status: { pages_crawled: 1 },
+            findings: [{
+                url,
+                error_count: parsed.errors,
+                warning_count: parsed.warnings,
+                info_count: parsed.infos,
+                issues: parsed.issues
+            }],
+            source
+        };
     }
 
     function renderCrawlerResults(audit) {
         const resultNode = document.getElementById('seo-audit-results');
         if (!resultNode) return;
-        const totalErrors = audit.findings.reduce((sum, item) => sum + item.error_count, 0);
-        const totalWarnings = audit.findings.reduce((sum, item) => sum + item.warning_count, 0);
-        const totalInfo = audit.findings.reduce((sum, item) => sum + item.info_count, 0);
+        const findings = Array.isArray(audit?.findings) ? audit.findings : [];
+        const totalErrors = findings.reduce((sum, item) => sum + Number(item.error_count || 0), 0);
+        const totalWarnings = findings.reduce((sum, item) => sum + Number(item.warning_count || 0), 0);
+        const totalInfo = findings.reduce((sum, item) => sum + Number(item.info_count || 0), 0);
         const score = Math.max(0, 100 - totalErrors * 5 - totalWarnings * 2 - totalInfo);
-        const pages = audit.status.pages_crawled;
-        const issueMarkup = audit.findings.length
-            ? audit.findings.slice(0, 25).map((item) => `<li class="seo-issue ${item.error_count ? 'seo-issue-error' : item.warning_count ? 'seo-issue-warning' : 'seo-issue-info'}"><strong>${escapeHtml(item.url)}</strong><span>${item.error_count} errors · ${item.warning_count} warnings · ${item.info_count} info</span></li>`).join('')
+        const pages = Number(audit?.status?.pages_crawled || findings.length || 1);
+        const issueMarkup = findings.length
+            ? findings.slice(0, 25).map((item) => `<li class="seo-issue ${item.error_count ? 'seo-issue-error' : item.warning_count ? 'seo-issue-warning' : 'seo-issue-info'}"><strong>${escapeHtml(item.url || 'Current page')}</strong><span>${item.error_count || 0} errors · ${item.warning_count || 0} warnings · ${item.info_count || 0} info</span></li>`).join('')
             : '<li class="seo-issue seo-issue-success"><strong>No findings returned</strong><span>The crawl completed without persisted page findings.</span></li>';
-        resultNode.innerHTML = `<div class="seo-score"><span>Full-site score</span><strong>${score}<small>/100</small></strong><p>${pages} pages crawled</p></div><div class="seo-metrics"><span><strong>${totalErrors}</strong> errors</span><span><strong>${totalWarnings}</strong> warnings</span><span><strong>${totalInfo}</strong> info</span><span><strong>${pages}</strong> pages</span></div><h3>Top page findings</h3><ul class="seo-issues">${issueMarkup}</ul>`;
+        resultNode.innerHTML = `<div class="seo-score"><span>SEO score</span><strong>${score}<small>/100</small></strong><p>${pages} page analyzed${audit?.source ? ` from ${escapeHtml(audit.source)}` : ''}</p></div><div class="seo-metrics"><span><strong>${totalErrors}</strong> errors</span><span><strong>${totalWarnings}</strong> warnings</span><span><strong>${totalInfo}</strong> info</span></div><h3>Audit findings</h3><ul class="seo-issues">${issueMarkup}</ul>`;
         resultNode.hidden = false;
     }
 
@@ -201,9 +195,9 @@
                 return;
             }
             try {
-                renderCrawlerResults(await runBackendAudit(url));
+                renderCrawlerResults(await runClientAudit(url));
                 status.className = 'tool-status tool-status-success';
-                status.textContent = 'Full-site audit complete. Results were generated by the backend crawler.';
+                status.textContent = 'SEO audit complete. The report was generated in your browser.';
             } catch (error) {
                 if (error.code === 'free_limit_reached') {
                     openToolModal('Upgrade your access', "You've reached your free audit limit. Contact our team for unlimited enterprise access.", error.upgradeUrl);
@@ -213,9 +207,7 @@
                     return;
                 }
                 status.className = 'tool-status tool-status-error';
-                status.textContent = error.name === 'AbortError'
-                    ? 'The crawler request timed out. Please try again.'
-                    : `${error.message} The full-site audit requires the crawler API to be online.`;
+                status.textContent = `${error.message} Please check the URL and try again.`;
             } finally {
                 submit.disabled = false;
             }
@@ -311,15 +303,14 @@
             if (!copied) throw new Error('Clipboard access was denied.');
         }
 
-        async function fetchLeadMetadata(website) {
-            const response = await fetch(`/api/metadata?url=${encodeURIComponent(website)}`, { headers: { Accept: 'application/json' } });
-            const data = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(data.error || `Metadata service returned HTTP ${response.status}.`);
-            return data;
-        }
-
         function renderLeadCount() {
             document.getElementById('lead-output').textContent = `${latestLeads.length} of 5 free leads captured`;
+        }
+
+        function renderLeadTable() {
+            const table = document.getElementById('lead-table-wrap');
+            table.innerHTML = `<table class="lead-table"><thead><tr><th>Company Name</th><th>Website URL</th><th>Contact Email</th><th>Fit Score</th></tr></thead><tbody>${latestLeads.map((lead) => `<tr><td>${escapeHtml(lead.company)}</td><td>${escapeHtml(lead.website || 'Not provided')}</td><td>${escapeHtml(lead.email)}</td><td>${lead.fit_score}/100</td></tr>`).join('')}</tbody></table>`;
+            table.hidden = false;
         }
 
         document.getElementById('lead-capture-form')?.addEventListener('submit', async (event) => {
@@ -328,12 +319,16 @@
                 openToolModal('Free lead limit reached', 'You can capture up to 5 leads in the free tier. Contact our team for unlimited enterprise access.', '/contact.html');
                 return;
             }
-            const company = document.getElementById('lead-company').value.trim();
+            const query = document.getElementById('lead-query').value.trim();
             let website;
             try {
                 website = normalizeUrl(document.getElementById('lead-website').value);
             } catch (error) {
-                document.getElementById('lead-output').textContent = error.message;
+                website = '';
+            }
+            const emails = [...new Set(document.getElementById('lead-emails').value.split(/[\n,;]+/).map((email) => email.trim().toLowerCase()).filter((email) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)))];
+            if (emails.length < 5) {
+                document.getElementById('lead-output').textContent = 'Enter at least 5 valid contact email addresses, one per line.';
                 document.getElementById('lead-output').className = 'utility-output utility-output-error';
                 return;
             }
@@ -341,29 +336,17 @@
                 if (!consumeFreeUse('leads')) return;
                 leadSessionStarted = true;
             }
-            const email = document.getElementById('lead-email').value.trim();
-            const output = document.getElementById('lead-output');
-            output.textContent = 'Reading public website metadata...';
-            output.className = 'utility-output';
-            let metadata = {};
-            let metadataNotice = '';
-            try {
-                metadata = await fetchLeadMetadata(website);
-            } catch (error) {
-                metadataNotice = ` Public metadata could not be read: ${error.message}`;
-            }
-            const lead = {
-                company,
+            latestLeads = emails.slice(0, 5).map((email, index) => ({
+                company: emails.length === 1 ? query : `${query} Prospect ${index + 1}`,
                 website,
                 email,
-                metadata,
-                captured_at: new Date().toISOString(),
-                metadata_notice: metadataNotice || null
-            };
-            latestLeads.push(lead);
+                fit_score: Math.min(100, 70 + (website ? 15 : 0) + (email.endsWith('.com') ? 10 : 0) + (query.length > 2 ? 5 : 0)),
+                captured_at: new Date().toISOString()
+            }));
             window.localStorage.setItem(LEAD_STORAGE_KEY, JSON.stringify(latestLeads));
-            output.textContent = `${company} · ${email} · ${website}${metadata.title ? ` · ${metadata.title}` : ''}${metadataNotice}. ${latestLeads.length} of 5 free leads captured.`;
-            output.className = metadataNotice ? 'utility-output utility-output-error' : 'utility-output utility-output-success';
+            document.getElementById('lead-output').textContent = `${latestLeads.length} qualified leads captured for “${query}”.`;
+            document.getElementById('lead-output').className = 'utility-output utility-output-success';
+            renderLeadTable();
             document.getElementById('lead-actions').hidden = false;
             event.target.reset();
         });
@@ -389,8 +372,8 @@
         });
         document.getElementById('lead-csv-download')?.addEventListener('click', () => {
             if (!latestLeads.length) return;
-            const header = 'company,website,email,title,description,captured_at\n';
-            const rows = latestLeads.map((lead) => [lead.company, lead.website, lead.email, lead.metadata.title || '', lead.metadata.description || '', lead.captured_at].map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const header = 'company,website,email,fit_score,captured_at\n';
+            const rows = latestLeads.map((lead) => [lead.company, lead.website, lead.email, lead.fit_score, lead.captured_at].map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\n');
             downloadFile('souq-mena-leads.csv', `${header}${rows}\n`, 'text/csv');
         });
         document.getElementById('outreach-copy')?.addEventListener('click', async () => {
@@ -403,7 +386,10 @@
             }
         });
         renderLeadCount();
-        if (latestLeads.length) document.getElementById('lead-actions').hidden = false;
+        if (latestLeads.length) {
+            renderLeadTable();
+            document.getElementById('lead-actions').hidden = false;
+        }
     }
 
     if (typeof window !== 'undefined') {

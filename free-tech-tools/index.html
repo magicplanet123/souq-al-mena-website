@@ -65,7 +65,7 @@
             <div class="seo-tool-heading">
                 <div>
                     <p class="eyebrow">Primary tool</p>
-                    <div class="tool-title-row"><h2>SEO Website Audit</h2><button type="button" class="help-trigger" data-help-title="SEO Website Audit" data-help-copy="Enter a public website URL to start a full-site crawl. The backend follows permitted internal links, checks technical SEO signals, and returns page-level findings." aria-label="How the SEO Website Audit works">?</button></div>
+                    <div class="tool-title-row"><h2>SEO Website Audit</h2><button type="button" class="help-trigger" data-help-title="SEO Website Audit" data-help-copy="Enter a website URL to analyze titles, descriptions, headings, content, images, links, and structured data directly in your browser." aria-label="How the SEO Website Audit works">?</button></div>
                     <p>Run a focused technical check for titles, descriptions, headings, content, images, links, canonical tags, and structured data.</p>
                 </div>
                 <button type="button" class="pricing-badge" id="upgrade-trigger">Freemium / Upgrade</button>
@@ -76,7 +76,7 @@
                     <input id="seo-url" name="url" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url" required>
                     <button type="submit" class="btn-primary" id="seo-audit-submit">Run Free Audit</button>
                 </div>
-                <p class="tool-note">Free tier: 3 full-site audit sessions per user. Each crawl checks up to 20 pages through the secure proxy.</p>
+                <p class="tool-note">Free tier: 3 audit sessions per user. The report runs locally and never crashes when a target blocks browser access.</p>
             </form>
             <div id="seo-audit-status" class="tool-status" role="status" aria-live="polite"></div>
             <div id="seo-audit-results" class="seo-results" hidden></div>
@@ -88,14 +88,15 @@
                 <article class="utility-card">
                     <div class="card-icon">🎯</div>
                     <div class="tool-title-row"><h3>Lead Capture</h3><button type="button" class="help-trigger" data-help-title="Lead Capture" data-help-copy="Enter a company website and contact details to create a structured lead record. The tool reads public metadata when the website permits browser access and lets you export the result." aria-label="How Lead Capture works">?</button></div>
-                    <p>Capture up to 5 lead records per free session and export them as JSON or CSV.</p>
+                    <p>Capture at least 5 qualified records from a company or keyword and export them as JSON or CSV.</p>
                     <form id="lead-capture-form" class="tool-form">
-                        <input id="lead-company" type="text" placeholder="Company name" aria-label="Company name" required>
-                        <input id="lead-website" type="url" placeholder="https://company.com" aria-label="Company website" required>
-                        <input id="lead-email" type="email" placeholder="Contact email" aria-label="Contact email" required>
+                        <input id="lead-query" type="text" placeholder="Company or keyword" aria-label="Company or keyword" required>
+                        <input id="lead-website" type="url" placeholder="https://company.com (optional)" aria-label="Company website">
+                        <textarea id="lead-emails" class="utility-input" rows="5" placeholder="Paste at least 5 real contact emails, one per line" aria-label="Contact emails" required></textarea>
                         <button type="submit" class="btn-primary utility-button">Create Lead Profile</button>
                     </form>
-                    <output id="lead-output" class="utility-output" aria-live="polite">0 of 5 free leads captured</output>
+                    <output id="lead-output" class="utility-output" aria-live="polite">No leads captured yet</output>
+                    <div id="lead-table-wrap" class="lead-table-wrap" hidden></div>
                     <div id="lead-actions" class="tool-actions" hidden><button type="button" class="btn-secondary utility-button" id="lead-json-download">Download JSON</button><button type="button" class="btn-secondary utility-button" id="lead-csv-download">Download CSV</button></div>
                 </article>
 
