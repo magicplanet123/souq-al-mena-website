@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free technology tools and API resources curated for businesses, creators, and developers across MENA.">
-    <meta name="keywords" content="free tech tools, free APIs, developer tools, MENA, UAE business tools">
+    <meta name="description" content="Run a freemium full-site SEO audit and use free developer, business, JSON, text, and URL tools for MENA businesses and creators.">
+    <meta name="keywords" content="full-site SEO audit, free SEO crawler, freemium SEO audit, free tech tools MENA, free developer tools, free APIs, UAE business tools">
     <meta name="author" content="Souq Al Mena">
     <title>MENA Free Tech Tools - Souq Al Mena</title>
     <link rel="canonical" href="https://www.souq-mena.com/free-tech-tools/">
     <link rel="stylesheet" href="../css/style.css">
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "MENA Free Tech Tools",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+            "description": "Freemium full-site SEO audit and practical browser tools for MENA businesses and developers."
+        }
+        </script>
 </head>
 <body>
     <nav class="navbar">
@@ -54,10 +65,10 @@
             <div class="seo-tool-heading">
                 <div>
                     <p class="eyebrow">Primary tool</p>
-                    <h2>SEO Website Audit</h2>
+                    <div class="tool-title-row"><h2>SEO Website Audit</h2><button type="button" class="help-trigger" data-help-title="SEO Website Audit" data-help-copy="Enter a public website URL to start a full-site crawl. The backend follows permitted internal links, checks technical SEO signals, and returns page-level findings." aria-label="How the SEO Website Audit works">?</button></div>
                     <p>Run a focused technical check for titles, descriptions, headings, content, images, links, canonical tags, and structured data.</p>
                 </div>
-                <span class="pricing-badge">Freemium</span>
+                <button type="button" class="pricing-badge" id="upgrade-trigger">Freemium / Upgrade</button>
             </div>
             <form id="seo-audit-form" class="seo-audit-form">
                 <label for="seo-url">Website URL</label>
@@ -65,7 +76,7 @@
                     <input id="seo-url" name="url" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url" required>
                     <button type="submit" class="btn-primary" id="seo-audit-submit">Run Free Audit</button>
                 </div>
-                <p class="tool-note">Free audits analyze one page at a time. The target website must allow browser access (CORS).</p>
+                <p class="tool-note">You get 3 full-site audits. Each free crawl is limited to 100 pages and runs on the secure backend.</p>
             </form>
             <div id="seo-audit-status" class="tool-status" role="status" aria-live="polite"></div>
             <div id="seo-audit-results" class="seo-results" hidden></div>
@@ -76,7 +87,7 @@
             <div class="divisions-grid">
                 <article class="utility-card">
                     <div class="card-icon">{ }</div>
-                    <h3>JSON Formatter</h3>
+                    <div class="tool-title-row"><h3>JSON Formatter</h3><button type="button" class="help-trigger" data-help-title="JSON Formatter" data-help-copy="Paste JSON and format it with readable indentation. Invalid JSON is reported locally and nothing is uploaded." aria-label="How the JSON Formatter works">?</button></div>
                     <p>Format and validate JSON directly in your browser.</p>
                     <textarea id="json-input" class="utility-input" rows="4" placeholder='{"name":"Souq Al Mena"}'></textarea>
                     <button type="button" class="btn-primary utility-button" id="json-format-button">Format JSON</button>
@@ -85,7 +96,7 @@
 
                 <article class="utility-card">
                     <div class="card-icon">Aa</div>
-                    <h3>Text Counter</h3>
+                    <div class="tool-title-row"><h3>Text Counter</h3><button type="button" class="help-trigger" data-help-title="Text Counter" data-help-copy="Type or paste content to count words and characters instantly in your browser." aria-label="How the Text Counter works">?</button></div>
                     <p>Count words and characters for content planning.</p>
                     <textarea id="text-input" class="utility-input" rows="4" placeholder="Paste your text here"></textarea>
                     <output id="text-output" class="utility-output" aria-live="polite">0 words · 0 characters</output>
@@ -93,7 +104,7 @@
 
                 <article class="utility-card">
                     <div class="card-icon">🔗</div>
-                    <h3>URL Encoder</h3>
+                    <div class="tool-title-row"><h3>URL Encoder</h3><button type="button" class="help-trigger" data-help-title="URL Encoder" data-help-copy="Encode query text safely for use in links and API requests. Processing happens locally in your browser." aria-label="How the URL Encoder works">?</button></div>
                     <p>Encode query text safely for links and API requests.</p>
                     <textarea id="url-input" class="utility-input" rows="4" placeholder="MENA free tech tools"></textarea>
                     <button type="button" class="btn-primary utility-button" id="url-encode-button">Encode URL Text</button>
@@ -142,6 +153,16 @@
             <a href="https://wa.me/971502687989?text=Hello%20Souq%20Al%20Mena%2C%20I%27d%20like%20to%20suggest%20a%20free%20tech%20tool." class="btn-secondary">Send a Suggestion</a>
         </div>
     </section>
+
+    <div class="tool-modal" id="tool-modal" hidden role="dialog" aria-modal="true" aria-labelledby="tool-modal-title">
+        <div class="tool-modal-content">
+            <button type="button" class="tool-modal-close" id="tool-modal-close" aria-label="Close dialog">&times;</button>
+            <p class="eyebrow">MENA Free Tech Tools</p>
+            <h2 id="tool-modal-title">Upgrade your access</h2>
+            <p id="tool-modal-copy">You've reached your free audit limit. Contact our team for unlimited enterprise access.</p>
+            <a href="../contact.html" class="btn-primary" id="tool-modal-action">Contact our team</a>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="footer-content">

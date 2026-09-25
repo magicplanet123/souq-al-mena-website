@@ -3,6 +3,7 @@
 
     const MAX_AUDIT_BYTES = 3 * 1024 * 1024;
     const REQUEST_TIMEOUT_MS = 15000;
+    const API_BASE_URL = (window.SOUQ_API_BASE || '').replace(/\/$/, '');
 
     function normalizeUrl(value) {
         const candidate = value.trim();
@@ -113,20 +114,64 @@
         resultNode.hidden = false;
     }
 
-    async function fetchAuditPage(url) {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-        try {
-            const response = await fetch(url, { mode: 'cors', signal: controller.signal, redirect: 'follow' });
-            if (!response.ok) throw new Error(`The website returned HTTP ${response.status}.`);
-            const contentLength = Number(response.headers.get('content-length') || 0);
-            if (contentLength > MAX_AUDIT_BYTES) throw new Error('The page is larger than the free audit limit.');
-            const html = await response.text();
-            if (new Blob([html]).size > MAX_AUDIT_BYTES) throw new Error('The page is larger than the free audit limit.');
-            return auditHtml(html, url, response.status);
-        } finally {
-            clearTimeout(timeout);
+    async function requestApi(path, options) {
+        const response = await fetch(`${API_BASE_URL}${path}`, {
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json', ...(options?.headers || {}) },
+            ...options
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            const error = new Error(data.error || `The audit service returned HTTP ${response.status}.`);
+            error.code = data.code;
+            error.upgradeUrl = data.upgrade_url;
+            throw error;
         }
+        return data;
+    }
+
+    function wait(milliseconds) {
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    }
+
+    async function runBackendAudit(url) {
+        const started = await requestApi('/api/seo/crawl/', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: `Free SEO audit: ${url}`,
+                start_url: url,
+                max_pages: 100,
+                concurrency: 4,
+                timeout: 30,
+                respect_robots_txt: true,
+                follow_redirects: true
+            })
+        });
+        for (let attempt = 0; attempt < 80; attempt += 1) {
+            await wait(attempt === 0 ? 500 : 1500);
+            const status = await requestApi(`/api/seo/crawl/${started.job_id}/`);
+            if (status.status === 'failed') throw new Error(status.error_message || 'The full-site audit failed.');
+            if (status.status === 'completed') {
+                const findings = await requestApi(`/api/seo/crawl/${started.job_id}/results/?limit=100`);
+                return { status, findings: findings.results || [] };
+            }
+        }
+        throw new Error('The audit is taking longer than expected. Check the job status and try again later.');
+    }
+
+    function renderCrawlerResults(audit) {
+        const resultNode = document.getElementById('seo-audit-results');
+        if (!resultNode) return;
+        const totalErrors = audit.findings.reduce((sum, item) => sum + item.error_count, 0);
+        const totalWarnings = audit.findings.reduce((sum, item) => sum + item.warning_count, 0);
+        const totalInfo = audit.findings.reduce((sum, item) => sum + item.info_count, 0);
+        const score = Math.max(0, 100 - totalErrors * 5 - totalWarnings * 2 - totalInfo);
+        const pages = audit.status.pages_crawled;
+        const issueMarkup = audit.findings.length
+            ? audit.findings.slice(0, 25).map((item) => `<li class="seo-issue ${item.error_count ? 'seo-issue-error' : item.warning_count ? 'seo-issue-warning' : 'seo-issue-info'}"><strong>${escapeHtml(item.url)}</strong><span>${item.error_count} errors · ${item.warning_count} warnings · ${item.info_count} info</span></li>`).join('')
+            : '<li class="seo-issue seo-issue-success"><strong>No findings returned</strong><span>The crawl completed without persisted page findings.</span></li>';
+        resultNode.innerHTML = `<div class="seo-score"><span>Full-site score</span><strong>${score}<small>/100</small></strong><p>${pages} pages crawled</p></div><div class="seo-metrics"><span><strong>${totalErrors}</strong> errors</span><span><strong>${totalWarnings}</strong> warnings</span><span><strong>${totalInfo}</strong> info</span><span><strong>${pages}</strong> pages</span></div><h3>Top page findings</h3><ul class="seo-issues">${issueMarkup}</ul>`;
+        resultNode.hidden = false;
     }
 
     function initializeAudit() {
@@ -148,18 +193,45 @@
             status.className = 'tool-status';
             status.textContent = 'Fetching the page and running the audit...';
             try {
-                renderResults(await fetchAuditPage(url));
+                renderCrawlerResults(await runBackendAudit(url));
                 status.className = 'tool-status tool-status-success';
-                status.textContent = 'Audit complete. Results are calculated in your browser.';
+                status.textContent = 'Full-site audit complete. Results were generated by the backend crawler.';
             } catch (error) {
+                if (error.code === 'free_limit_reached') {
+                    openToolModal('Upgrade your access', "You've reached your free audit limit. Contact our team for unlimited enterprise access.", error.upgradeUrl);
+                    status.className = 'tool-status tool-status-error';
+                    status.textContent = 'Your free audit limit has been reached.';
+                    submit.disabled = false;
+                    return;
+                }
                 status.className = 'tool-status tool-status-error';
                 status.textContent = error.name === 'AbortError'
                     ? 'The request timed out. Try a smaller or faster page.'
-                    : `${error.message} If the site blocks CORS, paste its HTML into a local audit or use a same-origin endpoint.`;
+                    : `${error.message} Confirm the crawler API is online and configured for this website.`;
             } finally {
                 submit.disabled = false;
             }
         });
+    }
+
+    function openToolModal(title, copy, actionUrl) {
+        const modal = document.getElementById('tool-modal');
+        if (!modal) return;
+        document.getElementById('tool-modal-title').textContent = title;
+        document.getElementById('tool-modal-copy').textContent = copy;
+        if (actionUrl) document.getElementById('tool-modal-action').href = actionUrl;
+        modal.hidden = false;
+    }
+
+    function initializeHelpAndUpgrade() {
+        document.querySelectorAll('.help-trigger').forEach((button) => {
+            button.addEventListener('click', () => openToolModal(button.dataset.helpTitle, button.dataset.helpCopy, '../contact.html'));
+        });
+        document.getElementById('upgrade-trigger')?.addEventListener('click', () => openToolModal('Upgrade your access', "You've reached your free audit limit. Contact our team for unlimited enterprise access.", '../contact.html'));
+        const modal = document.getElementById('tool-modal');
+        document.getElementById('tool-modal-close')?.addEventListener('click', () => { modal.hidden = true; });
+        modal?.addEventListener('click', (event) => { if (event.target === modal) modal.hidden = true; });
+        document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal) modal.hidden = true; });
     }
 
     function initializeUtilities() {
@@ -195,6 +267,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             initializeAudit();
             initializeUtilities();
+            initializeHelpAndUpgrade();
         });
     }
 }());
