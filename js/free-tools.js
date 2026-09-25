@@ -371,10 +371,13 @@
             if (!consumeFreeUse('outreach')) return;
             const name = document.getElementById('outreach-name').value.trim();
             const sender = document.getElementById('outreach-sender').value.trim();
+            const senderName = document.getElementById('outreach-sender-name').value.trim();
             const company = document.getElementById('outreach-company').value.trim();
             const opportunity = document.getElementById('outreach-issue').value.trim();
             const subject = `A quick idea for ${company}`;
-            const body = `Hi ${name},\n\nI noticed an opportunity around ${opportunity} at ${company}. This is often a practical way to improve visibility and create more qualified enquiries.\n\n${sender} helps MENA businesses turn technical gaps into focused growth plans, with clear priorities and measurable next steps.\n\nWould you be open to a 15-minute conversation next week so we can share two ideas specific to ${company}?\n\nRegards,\n${sender}`;
+            const greeting = name ? `Hi ${name},` : `Hi ${company} Team,`;
+            const signature = senderName || sender;
+            const body = `${greeting}\n\nI noticed an opportunity around ${opportunity} at ${company}. This is often a practical way to improve visibility and create more qualified enquiries.\n\n${sender} helps MENA businesses turn technical gaps into focused growth plans, with clear priorities and measurable next steps.\n\nWould you be open to a 15-minute conversation next week so we can share two ideas specific to ${company}?\n\nBest regards,\n${signature}`;
             latestEmail = { subject, body, sender, company };
             document.getElementById('outreach-output').textContent = `Subject: ${subject}\n\n${body}`;
             document.getElementById('outreach-output').className = 'utility-output utility-output-success';
